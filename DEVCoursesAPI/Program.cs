@@ -2,6 +2,7 @@ using System.Text;
 using DEVCoursesAPI;
 using DEVCoursesAPI.Data.Context;
 using DEVCoursesAPI.Data.Models;
+using DEVCoursesAPI.Middleware;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -153,5 +154,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware(typeof(MiddlewareError));
 
 app.Run();
