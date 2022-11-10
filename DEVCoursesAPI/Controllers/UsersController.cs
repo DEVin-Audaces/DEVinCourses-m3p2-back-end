@@ -50,6 +50,27 @@ public class UsersController : ControllerBase
 
         }
         
+            
+        /// <summary>
+        /// Login de usuário
+        /// </summary>
+        /// <param name="LoginUser"></param>
+        /// <returns>Retorna token e data de expiração do Token</returns>
+        /// <response code="200">Login efetuado com sucesso</response>
+        ///  <response code="500">Erro ao efetuar o login</response>
+        [HttpGet("LoginUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<ActionResult> UserLogin([FromQuery] LoginUser loginUser)
+        {
+            JWTResult jwtResult = _usersService.AuthUser(loginUser);
+            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UserLogin)} - JwtResult: {jwtResult}");
+                
+            return StatusCode(200, jwtResult); ;
+
+        }
+
         
     
 }
