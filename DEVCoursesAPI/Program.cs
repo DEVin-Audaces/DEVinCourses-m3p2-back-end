@@ -57,6 +57,7 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 
 builder.Services
     .AddScoped<IUsersService, UsersService>()
+    .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IUsersRepository<Users>, UsersRepository>();
 
 

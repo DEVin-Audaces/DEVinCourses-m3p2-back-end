@@ -29,5 +29,13 @@ public class UsersRepository : IUsersRepository<Users>
     {
         throw new NotImplementedException();
     }
+
+    public Users GetEmail(string email)
+    {
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            return  context.Users.Where(q => q.Email.ToLower() == email.ToLower()).FirstOrDefault(); 
+        }
+    }
 }
     
