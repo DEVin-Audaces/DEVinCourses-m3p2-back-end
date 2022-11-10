@@ -12,5 +12,8 @@ namespace DEVCoursesAPI.Data.Models
         [ForeignKey("Topic")]
         public Guid TopicId { get; set; }
         public bool Completed { get; set; }
+        public Training? Training { get; set; }
+        public Users? Users { get; set; }
+        public Topic? Topic { get; set; }
     }
 }

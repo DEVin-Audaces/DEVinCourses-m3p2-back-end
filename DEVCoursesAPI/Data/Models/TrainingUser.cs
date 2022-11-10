@@ -11,5 +11,7 @@ namespace DEVCoursesAPI.Data.Models
         public Guid UserId { get; set; }
         public bool Completed { get; set; }
         public DateTime RegistrationDate { get; set; }
+        public Training? Training { get; set; }
+        public Users? Users { get; set; }
     }
 }
