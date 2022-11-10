@@ -14,7 +14,7 @@ public class Users
     
     public string Password { get; set; }
     
-    public byte[] Image { get; set; }
+    public byte[]? Image { get; set; }
 
     
 }
