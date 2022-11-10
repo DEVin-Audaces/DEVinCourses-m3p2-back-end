@@ -8,7 +8,7 @@ public interface IUsersService
 {
     Guid Add(CreateUser user);
     bool Update(Users user);
-    IList<Users> GetAll();
+    JWTResult AuthUser(LoginUser login);
 
 
 }
