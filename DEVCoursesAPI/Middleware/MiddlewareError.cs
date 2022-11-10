@@ -1,5 +1,5 @@
 using System.Net;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace DEVCoursesAPI.Middleware;
 
@@ -30,7 +30,7 @@ public class MiddlewareError
 
         if      (exception is Exception)     code = HttpStatusCode.NotFound;
 
-        var resultError = JsonConvert.SerializeObject(new { error = exception.Message });
+        var resultError = JsonSerializer.Serialize(new { error = exception.Message });
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
         return context.Response.WriteAsync(resultError);
