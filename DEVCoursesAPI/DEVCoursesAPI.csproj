@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+    	 <PackageReference Include="Isopoh.Cryptography.Argon2" Version="1.1.12" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-rc.2.22472.11" />
@@ -26,6 +27,12 @@
     <ItemGroup>
       <Folder Include="Data" />
       <Folder Include="Migrations" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\..\..\.nuget\packages\newtonsoft.json\9.0.1\lib\netstandard1.0\Newtonsoft.Json.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@ using System.Text;
 using DEVCoursesAPI;
 using DEVCoursesAPI.Data.Context;
 using DEVCoursesAPI.Data.Models;
+using DEVCoursesAPI.Middleware;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -56,6 +57,7 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 
 builder.Services
     .AddScoped<IUsersService, UsersService>()
+    .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IUsersRepository<Users>, UsersRepository>();
 
 
@@ -153,5 +155,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware(typeof(MiddlewareError));
 
 app.Run();
