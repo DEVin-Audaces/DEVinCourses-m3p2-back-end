@@ -13,4 +13,6 @@ public class DEVCoursesContext: DbContext
     public DbSet<Training> Trainings { get; set; }
     public DbSet<Module> Modules { get; set; }
     public DbSet<Topic> Topics { get; set; }
+    public DbSet<TopicUser> TopicUsers { get; set; }
+    public DbSet<TrainingUser> TrainingUsers { get; set; }
 }
