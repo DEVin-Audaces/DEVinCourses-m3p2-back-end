@@ -12,13 +12,10 @@ public class UsersController : ControllerBase
 {
         private readonly ILogger<UsersController> _logger;
         private readonly IUsersService _usersService;
-        private readonly IOptions<TokenSettings> _tokenSettings;
 
-
-        public UsersController(IUsersService usersService, IOptions<TokenSettings> tokenSettings, ILogger<UsersController> logger)
+        public UsersController(IUsersService usersService, ILogger<UsersController> logger)
         {
             _usersService = usersService;
-            _tokenSettings = tokenSettings;
             _logger = logger;
         }
 
