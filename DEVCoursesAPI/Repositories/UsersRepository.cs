@@ -25,11 +25,6 @@ public class UsersRepository : IUsersRepository<Users>
         throw new NotImplementedException();
     }
 
-    public IList<Users> GetAll()
-    {
-        throw new NotImplementedException();
-    }
-
     public Users GetEmail(string email)
     {
         using (var context = _dbContextFactory.CreateDbContext())
