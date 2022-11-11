@@ -62,7 +62,7 @@ public class UsersService: IUsersService
     private JWTResult CreateToken(Users currentUser)
     {
         var generatedIn = DateTime.UtcNow;
-        var expiresIn = generatedIn.AddHours(1);
+        var expiresIn = generatedIn.AddHours(8);
         var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.Value.Key));
         var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
         var handler = new JwtSecurityTokenHandler();
