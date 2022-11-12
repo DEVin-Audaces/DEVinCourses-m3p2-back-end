@@ -18,11 +18,6 @@ namespace DEVCoursesAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<bool> CompleteTraining(TrainingUser trainingUser)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<Training> GetAll()
         {
             throw new NotImplementedException();
