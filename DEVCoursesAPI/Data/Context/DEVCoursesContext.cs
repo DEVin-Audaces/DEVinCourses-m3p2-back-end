@@ -23,7 +23,5 @@ public class DEVCoursesContext: DbContext
             .WithMany()
             .HasForeignKey(t => t.TrainingId)
             .OnDelete(DeleteBehavior.Restrict);
-
-
     }
 }
