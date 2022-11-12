@@ -18,23 +18,20 @@ namespace DEVCoursesAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<bool> CompleteTraining(TrainingUser trainingUser)
+        public Task<bool> CompleteTraining(TrainingUser trainingUser)
         {
-            List<TopicUser> topicList = _context.TopicUsers
-                .Where(x => x.TrainingId == trainingUser.TrainingId).ToList(); 
-
-            if (topicList.FirstOrDefault(topic => !topic.Completed) != null) return false;
-
-            trainingUser.Completed = true;
-            _context.Entry(trainingUser).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-                
-            return true;
+            throw new NotImplementedException();
         }
 
         public IList<Training> GetAll()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<List<TopicUser>> GetTopicUsers(TrainingUser trainingUser)
+        {
+            return await _context.TopicUsers
+                .Where(x => x.TrainingId == trainingUser.TrainingId).ToListAsync();
         }
 
         public async Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId)
@@ -48,6 +45,12 @@ namespace DEVCoursesAPI.Repositories
         public bool Update(Training model)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task UpdateTrainingUser(TrainingUser trainingUser)
+        {
+            _context.Entry(trainingUser).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
     }
 }
