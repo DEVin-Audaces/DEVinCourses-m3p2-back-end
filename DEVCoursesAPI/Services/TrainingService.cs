@@ -14,9 +14,12 @@ namespace DEVCoursesAPI.Services
 
         public async Task<bool> CompleteTraining(TrainingUser trainingUser)
         {
-            List<TopicUser> topicList = await _repository.GetTopicUsers(trainingUser);
-            var topicNotCompleted = topicList.FirstOrDefault(topic => !topic.Completed);
-            if (topicNotCompleted is not null) return false;
+            var topics = await _repository.GetTopics(trainingUser.TrainingId);
+            var filteredListTopicUsers = await _repository.GetFilteredTopicUsers(topics, trainingUser.UserId);
+
+            var topicNotCompleted = filteredListTopicUsers.FirstOrDefault(topic => !topic.Completed);
+            if (topicNotCompleted is not null)
+                return false;
 
             trainingUser.Completed = true;
             await _repository.UpdateTrainingUser(trainingUser);
