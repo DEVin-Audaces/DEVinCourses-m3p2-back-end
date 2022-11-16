@@ -55,7 +55,8 @@ namespace DEVCoursesAPI.Controllers
                 if (!isCompletedTraining)
                     return StatusCode(400,
                         "Nem todos os contéudos foram concluídos. " +
-                        "Favor concluir todas os tópicos do curso para completar o treinamento.");
+                        "Favor concluir todas os tópicos do curso para completar o treinamento."
+                        );
 
                 return StatusCode(204);
             }
