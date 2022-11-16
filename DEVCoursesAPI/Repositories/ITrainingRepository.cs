@@ -5,7 +5,8 @@ namespace DEVCoursesAPI.Repositories
     public interface ITrainingRepository<TEntity>: IEntity<TEntity>
     {
         Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId);    
-        Task<List<TopicUser>> GetTopicUsers(TrainingUser trainingUser);
+        Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId);
+        Task<List<Topic>> GetTopics(Guid trainingId);
         Task UpdateTrainingUser(TrainingUser trainingUser);
     }
 }

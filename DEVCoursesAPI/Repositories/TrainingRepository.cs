@@ -23,12 +23,42 @@ namespace DEVCoursesAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<TopicUser>> GetTopicUsers(TrainingUser trainingUser)
+        public async Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId)
         {
-            return await _context.TopicUsers
-                .Where(x => x.TrainingId == trainingUser.TrainingId).ToListAsync();
+            List<TopicUser> filteredTopics = new List<TopicUser>();
+                 await _context.TopicUsers.ForEachAsync(topicUser =>
+                 {    
+                    topics.ForEach(topic =>
+                    {
+                        if (topic.Id == topicUser.TopicId && userId == topicUser.UserId)
+                            filteredTopics.Add(topicUser);
+                    });
+                 });
+
+            return filteredTopics;
         }
 
+        public async Task<List<Topic>> GetTopics(Guid trainingId)
+        {
+            //await _context.Trainings
+            //    .Include(training => training.Modules)
+            //    .ThenInclude(module => module.Topics)
+            //    .FirstOrDefaultAsync(training => training.Id == trainingId);
+
+            _context.Trainings.Where(training => training.Id == trainingId);
+            List<Module> modules = await _context.Modules.Where(m => m.TrainingId == trainingId).ToListAsync();
+
+            List<Topic> topics = new List<Topic>();
+
+            modules.ForEach(m => _context.Topics.ForEachAsync(topic =>
+            {
+                if (topic.ModuleId == m.Id)
+                    topics.Add(topic);
+            }));
+
+            return topics;
+        }
+        
         public async Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId)
         {
             var trainingUser = await _context.TrainingUsers
