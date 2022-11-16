@@ -23,7 +23,9 @@ namespace DEVCoursesAPI.Controllers
         /// <summary>
         /// Cancelar a matrícula
         /// </summary>
-        /// <param name="registrationID"></param>
+        /// <param name="userID"> ID do usuário</param>
+        /// <param name="trainingID"> ID do treinamento relacionado ao usuário</param>
+        /// <param name="topicsID">IDs dos tópicos do treinamento relacionado ao usuário</param>
         /// <returns>Retorna se a matrícula foi cancelada ou não</returns>
         /// <response code = "204">Matrícula cancelada com sucesso</response> 
         /// <response code = "404">Matrícula não encontrada</response>
@@ -32,13 +34,13 @@ namespace DEVCoursesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteRegistration([FromBody] string userID, string trainingID, string[]topicsID)
+        public async Task<ActionResult> DeleteRegistration([FromBody] string userID, string trainingID, string[] topicsID)
         {
             try
             {
                 var registration = _trainingService.DeleteRegistration(userID,trainingID,topicsID);
-                if (!registration) return NotFound();
                 _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Método: {nameof(DeleteRegistration)}");
+                if (!registration) return NotFound();
 
                 return NoContent();
 

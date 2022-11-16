@@ -32,8 +32,8 @@ namespace DEVCoursesAPI.Repositories
 
                 foreach (var topicID in topicsID)
                 {
-                    TopicUser? topic = context.TopicUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TopicId.ToString() == topicID);
-                    context.TopicUsers.Remove(topic);
+                    TopicUser? topicUser = context.TopicUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TopicId.ToString() == topicID);
+                    context.TopicUsers.Remove(topicUser);
                 }
                 
                
