@@ -60,7 +60,8 @@ builder.Services
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IUsersRepository<Users>, UsersRepository>()
     .AddScoped<ITrainingRepository<Training>, TrainingRepository>()
-    .AddScoped<ITrainingService, TrainingService>();
+    .AddScoped<ITrainingService, TrainingService>()
+    .AddScoped<ITopicsRepository, TopicsRepository>();
 
 
 builder.Services
