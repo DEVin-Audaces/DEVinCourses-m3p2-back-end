@@ -82,16 +82,14 @@ namespace DEVCoursesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> DeleteRegistration( string userID, string trainingID, string[] topicsID)
+        public async Task<ActionResult> DeleteRegistration(Guid userID, Guid trainingID, [FromBody] Guid[] topicsID)
         {
             try
             {
-                var registration = _service.DeleteRegistration(userID, trainingID, topicsID);
+                var registration = await _service.DeleteRegistration(userID, trainingID, topicsID);
                 _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Método: {nameof(DeleteRegistration)}");
                 if (!registration) return NotFound();
-
                 return NoContent();
-
             }
             catch (Exception e)
             {
