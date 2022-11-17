@@ -25,5 +25,10 @@ namespace DEVCoursesAPI.Services
             await _repository.UpdateTrainingUser(trainingUser);
             return true;
         }
+
+        public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
+        {
+            return await _repository.DeleteRegistration(userID, trainingID, topicsID);
+        }
     }
 }
