@@ -23,20 +23,17 @@ namespace DEVCoursesAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public bool DeleteRegistration(string userID, string trainingID, string[] topicsID)
+        public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
             TrainingUser? registration =
-                _context.TrainingUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TrainingId.ToString() == trainingID);
-
-            _context.TrainingUsers.Remove(registration);
-
+                await _context.TrainingUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TrainingId == trainingID);
+            if (registration is not null) _context.TrainingUsers.Remove(registration);
             foreach (var topicID in topicsID)
             {
-                TopicUser? topicUser = _context.TopicUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TopicId.ToString() == topicID);
-                _context.TopicUsers.Remove(topicUser);
+                TopicUser? topicUser = await _context.TopicUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TopicId == topicID);
+                if (topicUser is not null) _context.TopicUsers.Remove(topicUser);
             }
-
-            return _context.SaveChanges() > 0;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId)
