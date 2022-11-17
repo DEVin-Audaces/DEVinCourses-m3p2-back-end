@@ -6,8 +6,8 @@ namespace DEVCoursesAPI.Repositories
 {
     public class TrainingRepository : ITrainingRepository<Training>
     {
-        private DEVCoursesContext _context;
-        
+        private readonly DEVCoursesContext _context;
+
         public TrainingRepository(DEVCoursesContext context)
         {
             _context = context;
@@ -23,38 +23,53 @@ namespace DEVCoursesAPI.Repositories
             throw new NotImplementedException();
         }
 
+        public bool DeleteRegistration(string userID, string trainingID, string[] topicsID)
+        {
+            TrainingUser? registration =
+                _context.TrainingUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TrainingId.ToString() == trainingID);
+
+            _context.TrainingUsers.Remove(registration);
+
+            foreach (var topicID in topicsID)
+            {
+                TopicUser? topicUser = _context.TopicUsers.FirstOrDefault(x => x.UserId.ToString() == userID && x.TopicId.ToString() == topicID);
+                _context.TopicUsers.Remove(topicUser);
+            }
+
+            return _context.SaveChanges() > 0;
+        }
+
         public async Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId)
         {
             List<TopicUser> filteredTopics = new List<TopicUser>();
-                 await _context.TopicUsers.ForEachAsync(topicUser =>
-                 {    
+                await _context.TopicUsers.ForEachAsync(topicUser =>
+                {    
                     topics.ForEach(topic =>
                     {
                         if (topic.Id == topicUser.TopicId && userId == topicUser.UserId)
                             filteredTopics.Add(topicUser);
                     });
-                 });
+                });
 
             return filteredTopics;
         }
 
         public async Task<List<Topic>> GetTopics(Guid trainingId)
         {
-            //await _context.Trainings
-            //    .Include(training => training.Modules)
-            //    .ThenInclude(module => module.Topics)
-            //    .FirstOrDefaultAsync(training => training.Id == trainingId);
-
-            _context.Trainings.Where(training => training.Id == trainingId);
             List<Module> modules = await _context.Modules.Where(m => m.TrainingId == trainingId).ToListAsync();
 
             List<Topic> topics = new List<Topic>();
-
-            modules.ForEach(m => _context.Topics.ForEachAsync(topic =>
+            await _context.Topics.ForEachAsync(topic =>
             {
-                if (topic.ModuleId == m.Id)
-                    topics.Add(topic);
-            }));
+                modules.ForEach(m =>
+                {
+                    if (topic.ModuleId == m.Id)
+                    {
+                        topics.Add(topic);
+                        return;
+                    }
+                } );
+            });
 
             return topics;
         }

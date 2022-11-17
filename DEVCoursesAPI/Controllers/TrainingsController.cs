@@ -1,4 +1,4 @@
-﻿using DEVCoursesAPI.Data.Models;
+﻿﻿using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DEVCoursesAPI.Controllers
 {
-    [Route("Trainings")]
+    [Route("trainings")]
     [ApiController]
     public class TrainingsController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace DEVCoursesAPI.Controllers
             ITrainingRepository<Training> repository,
             ITrainingService service)
         {
-            _tokenSettings = tokenSettings;
+            _service = service;
             _logger = logger;
             _repository = repository;
             _service = service;
@@ -36,7 +36,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "400">Curso não pode ser concluído por que existem tópicos não concluídos</response>
         /// <response code = "404">Conclusão não realizada</response>
         /// <response code = "500">Erro execução</response>
-        [Route("Complete")]
+        [Route("complete")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -66,6 +66,38 @@ namespace DEVCoursesAPI.Controllers
                 return StatusCode(500, e.Message);
             }
 
+        }
+
+        /// <summary>
+        /// Cancelar a matrícula
+        /// </summary>
+        /// <param name="userID"> ID do usuário</param>
+        /// <param name="trainingID"> ID do treinamento relacionado ao usuário</param>
+        /// <param name="topicsID">IDs dos tópicos do treinamento relacionado ao usuário</param>
+        /// <returns>Retorna se a matrícula foi cancelada ou não</returns>
+        /// <response code = "204">Matrícula cancelada com sucesso</response> 
+        /// <response code = "404">Matrícula não encontrada</response>
+        /// <response code = "500">Ocorreu erro durante a execução</response> 
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> DeleteRegistration( string userID, string trainingID, string[] topicsID)
+        {
+            try
+            {
+                var registration = _service.DeleteRegistration(userID, trainingID, topicsID);
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Método: {nameof(DeleteRegistration)}");
+                if (!registration) return NotFound();
+
+                return NoContent();
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(DeleteRegistration)}");
+                return StatusCode(500);
+            }
         }
     }
 }
