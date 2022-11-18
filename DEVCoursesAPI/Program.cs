@@ -59,9 +59,9 @@ builder.Services
     .AddScoped<IUsersService, UsersService>()
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IUsersRepository<Users>, UsersRepository>()
+    .AddScoped<ITrainingRepository<Training>, TrainingRepository>()
     .AddScoped<ITrainingService, TrainingService>()
-    .AddScoped<ITrainingRepository<Training>, TrainingRepository>();
-
+    .AddScoped<ITopicsRepository, TopicsRepository>();
 
 builder.Services
     .AddSwaggerGen(swagger =>
