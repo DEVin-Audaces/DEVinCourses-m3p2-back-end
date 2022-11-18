@@ -2,12 +2,12 @@
 
 namespace DEVCoursesAPI.Repositories
 {
-    public interface ITrainingRepository<TEntity>: IEntity<TEntity>
+    public interface ITrainingRepository
     {
-        Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId);    
+        Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID);
         Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId);
         Task<List<Topic>> GetTopics(Guid trainingId);
+        Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId);
         Task UpdateTrainingUser(TrainingUser trainingUser);
-        Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID);
     }
 }

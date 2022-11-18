@@ -4,43 +4,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DEVCoursesAPI.Repositories
 {
-    public class TrainingRepository : ITrainingRepository<Training>
+    public class TrainingRepository : ITrainingRepository
     {
-        private readonly DEVCoursesContext _context;
+        private readonly IDbContextFactory<DEVCoursesContext> _dbContextFactory;
 
-        public TrainingRepository(DEVCoursesContext context)
+        public TrainingRepository(IDbContextFactory<DEVCoursesContext> dbContextFactory)
         {
-            _context = context;
-        }
-
-        public Guid Add(Training model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Training> GetAll()
-        {
-            throw new NotImplementedException();
+            _dbContextFactory = dbContextFactory;
         }
 
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
-            TrainingUser? registration =
-                await _context.TrainingUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TrainingId == trainingID);
-            if (registration is not null) _context.TrainingUsers.Remove(registration);
-            foreach (var topicID in topicsID)
+            using (var context = _dbContextFactory.CreateDbContext())
             {
-                TopicUser? topicUser = await _context.TopicUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TopicId == topicID);
-                if (topicUser is not null) _context.TopicUsers.Remove(topicUser);
+                TrainingUser? registration =
+                    await context.TrainingUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TrainingId == trainingID);
+                if (registration is not null) context.TrainingUsers.Remove(registration);
+                foreach (var topicID in topicsID)
+                {
+                    TopicUser? topicUser = await context.TopicUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TopicId == topicID);
+                    if (topicUser is not null) context.TopicUsers.Remove(topicUser);
+                }
+                return await context.SaveChangesAsync() > 0;
             }
-            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId)
         {
-            List<TopicUser> filteredTopics = new List<TopicUser>();
-                await _context.TopicUsers.ForEachAsync(topicUser =>
-                {    
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                List<TopicUser> filteredTopics = new List<TopicUser>();
+                await context.TopicUsers.ForEachAsync(topicUser =>
+                {
                     topics.ForEach(topic =>
                     {
                         if (topic.Id == topicUser.TopicId && userId == topicUser.UserId)
@@ -48,46 +43,51 @@ namespace DEVCoursesAPI.Repositories
                     });
                 });
 
-            return filteredTopics;
+                return filteredTopics;
+            }
         }
 
         public async Task<List<Topic>> GetTopics(Guid trainingId)
         {
-            List<Module> modules = await _context.Modules.Where(m => m.TrainingId == trainingId).ToListAsync();
-
-            List<Topic> topics = new List<Topic>();
-            await _context.Topics.ForEachAsync(topic =>
+            using (var context = _dbContextFactory.CreateDbContext())
             {
-                modules.ForEach(m =>
-                {
-                    if (topic.ModuleId == m.Id)
-                    {
-                        topics.Add(topic);
-                        return;
-                    }
-                } );
-            });
+                List<Module> modules = await context.Modules.Where(m => m.TrainingId == trainingId).ToListAsync();
 
-            return topics;
+                List<Topic> topics = new List<Topic>();
+                await context.Topics.ForEachAsync(topic =>
+                {
+                    modules.ForEach(m =>
+                    {
+                        if (topic.ModuleId == m.Id)
+                        {
+                            topics.Add(topic);
+                            return;
+                        }
+                    });
+                });
+
+                return topics;
+            }
         }
-        
+
         public async Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId)
         {
-            var trainingUser = await _context.TrainingUsers
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var trainingUser = await context.TrainingUsers
                 .Where(training => training.UserId == userId && training.TrainingId == trainingId)
                 .FirstOrDefaultAsync();
-            return trainingUser;
-        }
-
-        public bool Update(Training model)
-        {
-            throw new NotImplementedException();
+                return trainingUser;
+            }
         }
 
         public async Task UpdateTrainingUser(TrainingUser trainingUser)
         {
-            _context.Entry(trainingUser).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                context.Entry(trainingUser).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
