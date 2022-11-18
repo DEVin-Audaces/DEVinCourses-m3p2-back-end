@@ -13,6 +13,20 @@ namespace DEVCoursesAPI.Repositories
             _dbContextFactory = dbContextFactory;
         }
 
+        public async Task<bool> CheckForActiveStudents(Guid id)
+        {
+            using (var _context = _dbContextFactory.CreateDbContext())
+            {
+                List<TrainingUser> trainingUsers = await _context.TrainingUsers
+                   .Where(trainingusers => trainingusers.TrainingId == id)
+                   .ToListAsync();
+
+                int activeStudents = trainingUsers.Where(tu => tu.Completed == false).Count();
+
+                return activeStudents == 0;
+            }
+        }
+
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
             using (var context = _dbContextFactory.CreateDbContext())
