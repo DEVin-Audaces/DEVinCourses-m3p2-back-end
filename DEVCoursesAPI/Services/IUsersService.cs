@@ -6,7 +6,7 @@ namespace DEVCoursesAPI.Services;
 
 public interface IUsersService
 {
-    Guid Add(CreateUser user);
+    Guid Add(DataUser user);
     bool Update(Users user);
     JWTResult AuthUser(LoginUser login);
 

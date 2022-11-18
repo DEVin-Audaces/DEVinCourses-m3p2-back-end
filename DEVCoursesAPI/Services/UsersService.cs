@@ -25,7 +25,7 @@ public class UsersService: IUsersService
     }
 
 
-    public Guid Add(CreateUser user)
+    public Guid Add(DataUser user)
     {
         throw new NotImplementedException();
     }
