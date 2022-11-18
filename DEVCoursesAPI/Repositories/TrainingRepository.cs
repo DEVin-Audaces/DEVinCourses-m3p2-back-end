@@ -157,6 +157,16 @@ namespace DEVCoursesAPI.Repositories
                 await context.SaveChangesAsync();
             }
         }
+        public async Task<Guid> CreateTraining(Training training)
+        {
+            using (var db = _dbContextFactory.CreateDbContext()) 
+            {
+                db.Trainings.Add(training);
+                await db.SaveChangesAsync();
+
+                return training.Id;
+            }
+        }
     }
 }
 
