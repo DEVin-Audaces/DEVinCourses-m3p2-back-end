@@ -23,6 +23,16 @@ namespace DEVCoursesAPI.Repositories
         {
             throw new NotImplementedException();
         }
+        public async Task<Training?> GetByIdAsync(Guid id)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Trainings
+                    .Include(training => training.Modules)
+                    .ThenInclude(module => module.Topics)
+                    .FirstOrDefaultAsync();
+            }
+        }
 
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
