@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DEVCoursesAPI.Repositories
 {
-    public class TrainingRepository
+    public class TrainingRepository : ITrainingRepository
     {
         private readonly IDbContextFactory<DEVCoursesContext> _dbContextFactory;
 
