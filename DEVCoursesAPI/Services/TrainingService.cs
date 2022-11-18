@@ -1,4 +1,6 @@
-﻿using DEVCoursesAPI.Data.Models;
+﻿using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.Models;
+using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
 namespace DEVCoursesAPI.Services
@@ -10,6 +12,11 @@ namespace DEVCoursesAPI.Services
         public TrainingService(ITrainingRepository repository)
         {
             _repository = repository;
+        }
+
+        public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
+        {
+            return _repository.UserLoginTrainingsList(userId);
         }
 
         public async Task<bool> CompleteTraining(TrainingUser trainingUser)

@@ -1,4 +1,5 @@
 ﻿using DEVCoursesAPI.Data.Context;
+using DEVCoursesAPI.Data.DTOs;
 using DEVCoursesAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,16 @@ namespace DEVCoursesAPI.Repositories
         public TrainingRepository(IDbContextFactory<DEVCoursesContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
+        }
+
+        public Guid Add(Training model)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public IList<Training> GetAll()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
@@ -81,6 +92,53 @@ namespace DEVCoursesAPI.Repositories
             }
         }
 
+        public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var trainings = context.Trainings.ToList();
+                var trainingsUsers = context.TrainingUsers.Where(x => x.UserId == userId).ToList();
+
+                List<TrainingNotRegistered> FilteredList = new List<TrainingNotRegistered>();
+
+                foreach (var training in trainings)
+                {
+                    foreach (var trainingUser in trainingsUsers)
+                    {
+                        if (training.Id == trainingUser.TrainingId)
+                        {
+                            var newTraining = new TrainingNotRegistered()
+                            {
+                                Id = training.Id,
+                                Name = training.Name,
+                                Summary = training.Summary,
+                                Duration = training.Duration,
+                                Instructor = training.Instructor,
+                                Author = training.Author,
+                                Active = training.Active
+                            };
+
+                            FilteredList.Add(newTraining);
+                        }
+                    }
+                }
+
+                trainings.RemoveAll(x => trainingsUsers.Any(y => x.Id == y.TrainingId));
+                trainings.ForEach(training =>
+                {
+                    var newTraining = new TrainingNotRegistered()
+                    {
+                        Id = training.Id,
+                        Name = training.Name,
+                        Summary = training.Summary,
+                        Duration = training.Duration,
+                    };
+                    FilteredList.Add(newTraining);
+                });
+
+                return FilteredList;
+            }
+        }
         public async Task UpdateTrainingUser(TrainingUser trainingUser)
         {
             using (var context = _dbContextFactory.CreateDbContext())
@@ -91,3 +149,4 @@ namespace DEVCoursesAPI.Repositories
         }
     }
 }
+

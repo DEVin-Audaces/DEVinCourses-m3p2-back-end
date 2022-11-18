@@ -1,9 +1,8 @@
-﻿﻿using DEVCoursesAPI.Data.Models;
-using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using DEVCoursesAPI.Repositories;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -11,20 +10,51 @@ namespace DEVCoursesAPI.Controllers
     [ApiController]
     public class TrainingsController : ControllerBase
     {
-        private readonly ILogger<UsersController> _logger;
+        private readonly ILogger<TrainingsController> _logger;
         private readonly IOptions<TrainingsController> _tokenSettings;
         private readonly ITrainingRepository _repository;
         private readonly ITrainingService _service;
-
-        public TrainingsController(IOptions<TrainingsController> tokenSettings,
-            ILogger<UsersController> logger,
+        public TrainingsController(
+            IOptions<TrainingsController> tokenSettings,
+            ILogger<TrainingsController> logger,
             ITrainingRepository repository,
             ITrainingService service)
         {
             _service = service;
             _logger = logger;
             _repository = repository;
-            _service = service;
+        }
+
+        /// <summary>
+        /// Visualizar a tela de treinamentos
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns>Retorna os treinamentos de acordo com o Id do usuário inserido</returns>
+        /// <response code = "200">Retorna Lista de Treinamentos</response>
+        /// <response code = "500">Erro execução</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<ActionResult> Get([FromQuery][Required] Guid UserId)
+        {
+            try
+            {
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Get)}");
+                var trainings = _service.UserLoginTrainingsList(UserId);
+
+                if (trainings == null)
+                    return NotFound();
+
+                return Ok(trainings);
+
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)}-Method:{nameof(Get)}");
+                return StatusCode(500);
+            }
         }
 
         /// <summary>

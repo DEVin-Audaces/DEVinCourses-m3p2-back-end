@@ -64,7 +64,6 @@ builder.Services
     .AddScoped<ITrainingService, TrainingService>()
     .AddScoped<ITopicsRepository, TopicsRepository>();
 
-
 builder.Services
     .AddSwaggerGen(swagger =>
     {
