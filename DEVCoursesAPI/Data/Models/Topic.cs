@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DEVCoursesAPI.Data.DTOs.TopicDTO;
 
 namespace DEVCoursesAPI.Data.Models
 {
@@ -15,5 +16,17 @@ namespace DEVCoursesAPI.Data.Models
         [ForeignKey("Module")]
         public Guid ModuleId { get; set; }
         public Module? Module { get; set; }
+
+        public static explicit operator ReadTopicDto(Topic topic)
+        {
+            return new ReadTopicDto
+            {
+                Id = topic.Id,
+                Type = topic.Type,
+                Name = topic.Name,
+                Content = topic.Content,
+                Index = topic.Index
+            };
+        }
     }
 }
