@@ -18,7 +18,7 @@ namespace DEVCoursesAPI.Repositories
         {
             throw new NotImplementedException();
         }
-        
+
         public IList<Training> GetAll()
         {
             throw new NotImplementedException();
@@ -26,13 +26,11 @@ namespace DEVCoursesAPI.Repositories
 
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 TrainingUser? registration =
                     await context.TrainingUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TrainingId == trainingID);
                 if (registration is not null) context.TrainingUsers.Remove(registration);
-                foreach (var topicID in topicsID)
-                {
+                foreach (var topicID in topicsID) {
                     TopicUser? topicUser = await context.TopicUsers.FirstOrDefaultAsync(x => x.UserId == userID && x.TopicId == topicID);
                     if (topicUser is not null) context.TopicUsers.Remove(topicUser);
                 }
@@ -42,8 +40,7 @@ namespace DEVCoursesAPI.Repositories
 
         public async Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 List<TopicUser> filteredTopics = new List<TopicUser>();
                 await context.TopicUsers.ForEachAsync(topicUser =>
                 {
@@ -60,8 +57,7 @@ namespace DEVCoursesAPI.Repositories
 
         public async Task<List<Topic>> GetTopics(Guid trainingId)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 List<Module> modules = await context.Modules.Where(m => m.TrainingId == trainingId).ToListAsync();
 
                 List<Topic> topics = new List<Topic>();
@@ -69,8 +65,7 @@ namespace DEVCoursesAPI.Repositories
                 {
                     modules.ForEach(m =>
                     {
-                        if (topic.ModuleId == m.Id)
-                        {
+                        if (topic.ModuleId == m.Id) {
                             topics.Add(topic);
                             return;
                         }
@@ -83,8 +78,7 @@ namespace DEVCoursesAPI.Repositories
 
         public async Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 var trainingUser = await context.TrainingUsers
                 .Where(training => training.UserId == userId && training.TrainingId == trainingId)
                 .FirstOrDefaultAsync();
@@ -94,21 +88,16 @@ namespace DEVCoursesAPI.Repositories
 
         public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 var trainings = context.Trainings.ToList();
                 var trainingsUsers = context.TrainingUsers.Where(x => x.UserId == userId).ToList();
 
                 List<TrainingNotRegistered> FilteredList = new List<TrainingNotRegistered>();
 
-                foreach (var training in trainings)
-                {
-                    foreach (var trainingUser in trainingsUsers)
-                    {
-                        if (training.Id == trainingUser.TrainingId)
-                        {
-                            var newTraining = new TrainingNotRegistered()
-                            {
+                foreach (var training in trainings) {
+                    foreach (var trainingUser in trainingsUsers) {
+                        if (training.Id == trainingUser.TrainingId) {
+                            var newTraining = new TrainingNotRegistered() {
                                 Id = training.Id,
                                 Name = training.Name,
                                 Summary = training.Summary,
@@ -126,8 +115,7 @@ namespace DEVCoursesAPI.Repositories
                 trainings.RemoveAll(x => trainingsUsers.Any(y => x.Id == y.TrainingId));
                 trainings.ForEach(training =>
                 {
-                    var newTraining = new TrainingNotRegistered()
-                    {
+                    var newTraining = new TrainingNotRegistered() {
                         Id = training.Id,
                         Name = training.Name,
                         Summary = training.Summary,
@@ -141,13 +129,13 @@ namespace DEVCoursesAPI.Repositories
         }
         public async Task UpdateTrainingUser(TrainingUser trainingUser)
         {
-            using (var context = _dbContextFactory.CreateDbContext())
-            {
+            using (var context = _dbContextFactory.CreateDbContext()) {
                 context.Entry(trainingUser).State = EntityState.Modified;
                 await context.SaveChangesAsync();
             }
         }
-        public async Task<Guid> CreateTraining(Training training) {
+        public async Task<Guid> CreateTraining(Training training)
+        {
             using (var context = _dbContextFactory.CreateDbContext()) {
                 context.Trainings.Add(training);
                 await context.SaveChangesAsync();
