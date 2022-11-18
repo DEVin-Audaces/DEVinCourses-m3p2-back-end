@@ -1,33 +1,39 @@
 {
   "format": 1,
   "restore": {
-    "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI.Tests/DEVCoursesAPI.Tests.csproj": {}
+    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {}
   },
   "projects": {
-    "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI.Tests/DEVCoursesAPI.Tests.csproj": {
+    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI.Tests/DEVCoursesAPI.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
         "projectName": "DEVCoursesAPI.Tests",
-        "projectPath": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI.Tests/DEVCoursesAPI.Tests.csproj",
-        "packagesPath": "/home/raiche/.nuget/packages/",
-        "outputPath": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI.Tests/obj/",
+        "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
+        "packagesPath": "C:\\Users\\matheus.gevartosky\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/raiche/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\matheus.gevartosky\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/DEVCoursesAPI.csproj": {
-                "projectPath": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/DEVCoursesAPI.csproj"
+              "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
+                "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj"
               }
             }
           }
@@ -42,9 +48,25 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Mvc.Testing": {
+              "target": "Package",
+              "version": "[6.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.0-rc.2.22472.11, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.1.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.18.2, )"
             },
             "coverlet.collector": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -69,7 +91,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -78,26 +101,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.300/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/DEVCoursesAPI.csproj": {
+    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/DEVCoursesAPI.csproj",
+        "projectUniqueName": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
         "projectName": "DEVCoursesAPI",
-        "projectPath": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/DEVCoursesAPI.csproj",
-        "packagesPath": "/home/raiche/.nuget/packages/",
-        "outputPath": "/home/raiche/DevInHouse/quente/DEVCourses/DEVCoursesAPI/obj/",
+        "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
+        "packagesPath": "C:\\Users\\matheus.gevartosky\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/raiche/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\matheus.gevartosky\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -116,6 +145,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Isopoh.Cryptography.Argon2": {
+              "target": "Package",
+              "version": "[1.1.12, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.10, )"
@@ -159,7 +192,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -171,7 +205,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.300/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
