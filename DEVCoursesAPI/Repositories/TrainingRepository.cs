@@ -94,48 +94,50 @@ namespace DEVCoursesAPI.Repositories
 
         public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
         {
-
-            var trainings = _context.Trainings.ToList();
-            var trainingsUsers = _context.TrainingUsers.Where(x => x.UserId == userId).ToList();
-
-            List<TrainingNotRegistered> FilteredList = new List<TrainingNotRegistered>();
-
-            foreach (var training in trainings)
+            using (var context = _dbContextFactory.CreateDbContext())
             {
-                foreach (var trainingUser in trainingsUsers)
+                var trainings = context.Trainings.ToList();
+                var trainingsUsers = context.TrainingUsers.Where(x => x.UserId == userId).ToList();
+
+                List<TrainingNotRegistered> FilteredList = new List<TrainingNotRegistered>();
+
+                foreach (var training in trainings)
                 {
-                    if (training.Id == trainingUser.TrainingId)
+                    foreach (var trainingUser in trainingsUsers)
                     {
-                        var newTraining = new TrainingNotRegistered()
+                        if (training.Id == trainingUser.TrainingId)
                         {
-                            Id = training.Id,
-                            Name = training.Name,
-                            Summary = training.Summary,
-                            Duration = training.Duration,
-                            Instructor = training.Instructor,
-                            Author = training.Author,
-                            Active = training.Active
-                        };
+                            var newTraining = new TrainingNotRegistered()
+                            {
+                                Id = training.Id,
+                                Name = training.Name,
+                                Summary = training.Summary,
+                                Duration = training.Duration,
+                                Instructor = training.Instructor,
+                                Author = training.Author,
+                                Active = training.Active
+                            };
 
-                        FilteredList.Add(newTraining);
-                    } 
+                            FilteredList.Add(newTraining);
+                        }
+                    }
                 }
-            }
 
-            trainings.RemoveAll(x => trainingsUsers.Any(y => x.Id == y.TrainingId));
-            trainings.ForEach(training => 
-            {
-                var newTraining = new TrainingNotRegistered()
+                trainings.RemoveAll(x => trainingsUsers.Any(y => x.Id == y.TrainingId));
+                trainings.ForEach(training =>
                 {
-                    Id = training.Id,
-                    Name = training.Name,
-                    Summary = training.Summary,
-                    Duration = training.Duration,
-                };
-                FilteredList.Add(newTraining);
-            });
+                    var newTraining = new TrainingNotRegistered()
+                    {
+                        Id = training.Id,
+                        Name = training.Name,
+                        Summary = training.Summary,
+                        Duration = training.Duration,
+                    };
+                    FilteredList.Add(newTraining);
+                });
 
-            return FilteredList;
+                return FilteredList;
+            }
         }
         public async Task UpdateTrainingUser(TrainingUser trainingUser)
         {

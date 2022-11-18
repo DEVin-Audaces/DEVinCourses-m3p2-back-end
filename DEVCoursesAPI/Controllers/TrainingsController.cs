@@ -1,9 +1,7 @@
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
 namespace DEVCoursesAPI.Controllers
@@ -18,7 +16,7 @@ namespace DEVCoursesAPI.Controllers
         private readonly ITrainingService _service;
         public TrainingsController(
             IOptions<TrainingsController> tokenSettings,
-            ILogger<UsersController> logger,
+            ILogger<TrainingsController> logger,
             ITrainingRepository repository,
             ITrainingService service)
         {
