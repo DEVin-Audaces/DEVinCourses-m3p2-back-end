@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
+using System.Text.RegularExpressions;
 using DEVCoursesAPI.Data.DTOs;
 using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
@@ -99,6 +100,33 @@ public class UsersService: IUsersService
                 new Claim(JwtRegisteredClaimNames.Jti, currentUser.Id.ToString())
             }
         );
+    }
+
+    public bool ResetPassword(LoginUser login)
+    {
+        var currentUser = this.UserSearchEmail(login.Email);
+
+        if (currentUser == null)
+            throw new Exception("Usuário não encontrado");
+
+
+        this.ValidatePassword(login.Password);
+
+        currentUser.Password = _passwordHasher.CreateHash(login.Password);
+
+        return _usersRepository.Update(currentUser);
+
+    }
+
+    private void ValidatePassword(string password)
+    {
+        Regex regex = new Regex(@"(^(?=.*\d)(?=.*[a-zA-Z])(?:([0-9a-zA-Z])(?!\1)){8,}$)", RegexOptions.IgnorePatternWhitespace);
+
+        Match m = regex.Match(password);
+
+        if (!m.Success)
+            throw new Exception("Senha deve ter pelo menos 8 dígitos alfanuméricos (letras e números)");
+
     }
 
 }

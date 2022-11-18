@@ -68,6 +68,25 @@ public class UsersController : ControllerBase
 
         }
 
-        
-    
+        /// <summary>
+        /// Resetar senha do usuário
+        /// </summary>
+        /// <param name="LoginUser"></param>
+        /// <returns>Retorna se foi atualizado a senha no banco</returns>
+        /// <response code="200">Senha resetada com sucesso</response>
+        /// <response code="500">Erro ao efetuar a reinicialização da senha</response>
+        [HttpPut("ResetPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> ResetPassword([FromBody] LoginUser loginUser)
+        {
+            bool updatePassword = _usersService.ResetPassword(loginUser);
+            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(ResetPassword)} - UpdatePassword: {updatePassword}");
+
+            return StatusCode(200, updatePassword); ;
+
+        }
+
+
+
 }
