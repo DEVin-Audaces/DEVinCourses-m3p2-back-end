@@ -6,10 +6,10 @@ using DEVCoursesAPI.Repositories;
 namespace DEVCoursesAPI.Services
 {
     public class TrainingService : ITrainingService
-    {
-        private readonly ITrainingRepository<Training> _repository;
+    { 
+        private readonly ITrainingRepository _repository;
 
-        public TrainingService(ITrainingRepository<Training> repository)
+        public TrainingService(ITrainingRepository repository)
         {
             _repository = repository;
         }
