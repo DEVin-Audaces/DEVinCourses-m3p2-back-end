@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Post([FromBody] CreateUser user)
+        public async Task<ActionResult> Post([FromBody] DataUser user)
         {
             try
             {
