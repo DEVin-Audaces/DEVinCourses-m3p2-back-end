@@ -167,6 +167,23 @@ namespace DEVCoursesAPI.Repositories
                 return training.Id;
             }
         }
+
+        public async Task<bool> SuspendAsync(Guid id)
+        {
+            using (var db = _dbContextFactory.CreateDbContext()) 
+             {
+                Training? training = await db.Trainings.FirstOrDefaultAsync(training => training.Id == id);
+
+                if (training == null | training.Active == false)
+                    return false;
+
+                training.Active = false;
+                db.Trainings.Update(training);
+                int result = await db.SaveChangesAsync();
+
+                return result > 0;
+            }
+        }
     }
 }
 
