@@ -13,5 +13,6 @@ namespace DEVCoursesAPI.Repositories
         Task UpdateTrainingUser(TrainingUser trainingUser);
         Task<Training?> GetByIdAsync(Guid id);
         Task<Guid> CreateTraining(Training training);
+        Task<bool> SuspendAsync(Guid id);
     }
 }
