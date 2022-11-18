@@ -22,7 +22,11 @@ public class UsersRepository : IUsersRepository<Users>
 
     public bool Update(Users model)
     {
-        throw new NotImplementedException();
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            context.Update(model);
+            return context.SaveChanges() > 0;
+        }
     }
 
     public Users GetEmail(string email)

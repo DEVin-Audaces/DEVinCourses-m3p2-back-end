@@ -1,5 +1,6 @@
 ﻿using DEVCoursesAPI.Data.Context;
 using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -165,6 +166,67 @@ namespace DEVCoursesAPI.Repositories
                 await db.SaveChangesAsync();
 
                 return training.Id;
+            }
+        }
+
+        public async Task<bool> SuspendAsync(Guid id)
+        {
+            using (var db = _dbContextFactory.CreateDbContext()) 
+             {
+                Training? training = await db.Trainings.FirstOrDefaultAsync(training => training.Id == id);
+
+                if (training == null | training.Active == false)
+                    return false;
+
+                training.Active = false;
+                db.Trainings.Update(training);
+                int result = await db.SaveChangesAsync();
+
+                return result > 0;
+            }
+        }
+
+        public async Task<bool> CheckForActiveStudents(Guid id)
+        {
+            using (var db = _dbContextFactory.CreateDbContext())
+            {
+                List<TrainingUser> trainingUsers = await db.TrainingUsers.Where(trainingusers => trainingusers.TrainingId == id).ToListAsync();
+                int activeStudents = trainingUsers.Where(tu => tu.Completed == false).Count();
+
+                return activeStudents == 0;
+            }
+        }
+
+        public async Task<bool> CreateTrainingRegistration(TrainingRegistrationDto trainingRegistrationDto)
+        {
+            using (var db = _dbContextFactory.CreateDbContext())
+            {
+                Training? training = await db.Trainings.FirstOrDefaultAsync(training => training.Id == trainingRegistrationDto.TrainingId);
+
+                if (training.Active == false) return false;
+
+                TrainingUser trainingUserRegistered = await db.TrainingUsers.FirstOrDefaultAsync(trainingUser => trainingUser.UserId == trainingRegistrationDto.UserId && trainingUser.TrainingId == trainingRegistrationDto.TrainingId);
+
+                if (trainingUserRegistered != null) throw new Exception("Usuário já possui matrícula no treinamento");
+
+                TrainingUser trainingUser = new TrainingUser();
+                trainingUser.Completed = false;
+                trainingUser.TrainingId = trainingRegistrationDto.TrainingId;
+                trainingUser.UserId = trainingRegistrationDto.UserId;
+                trainingUser.RegistrationDate = DateTime.UtcNow;
+                db.TrainingUsers.Add(trainingUser);
+
+                foreach (var topic in trainingRegistrationDto.TopicIds)
+                {
+                    TopicUser topicUser = new TopicUser();
+                    topicUser.UserId = trainingRegistrationDto.UserId;
+                    topicUser.TopicId = topic;
+                    topicUser.Completed = false;
+                    db.TopicUsers.Add(topicUser);
+                }
+
+                await db.SaveChangesAsync();
+                return true;
             }
         }
     }

@@ -1,4 +1,5 @@
 using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.Models;
 
 namespace DEVCoursesAPI.Repositories
@@ -13,5 +14,8 @@ namespace DEVCoursesAPI.Repositories
         Task UpdateTrainingUser(TrainingUser trainingUser);
         Task<Training?> GetByIdAsync(Guid id);
         Task<Guid> CreateTraining(Training training);
+        Task<bool> SuspendAsync(Guid id);
+        Task<bool> CheckForActiveStudents(Guid id);
+        Task<bool> CreateTrainingRegistration(TrainingRegistrationDto trainingRegistrationDto);
     }
 }

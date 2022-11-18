@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Repositories;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -33,6 +35,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "200">Retorna Lista de Treinamentos</response>
         /// <response code = "500">Erro execução</response>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
@@ -68,6 +71,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "500">Erro execução</response>
         [Route("complete")]
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +113,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "404">Matrícula não encontrada</response>
         /// <response code = "500">Ocorreu erro durante a execução</response> 
         [HttpDelete]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -125,6 +130,36 @@ namespace DEVCoursesAPI.Controllers
             {
                 _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(DeleteRegistration)}");
                 return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Criar matrícula
+        /// </summary>
+        /// <param name="trainingRegistrationDto"> DTO com ID do usuário, treinamento e tópicos</param>
+        /// <returns>Retorna informando se a matrícula foi realizada</returns>
+        /// <response code = "201">Matrícula realizada com sucesso</response>
+        /// <response code = "400">Inserção não realizada, pois treinamento inativo</response>
+        /// <response code = "500">Ocorreu erro durante a execução</response> 
+        [HttpPost("registration")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateTrainingRegistration([FromBody] TrainingRegistrationDto trainingRegistrationDto)
+        {
+            try
+            {
+                bool trainingStatus = await _service.CreateTrainingRegistrationAsync(trainingRegistrationDto);
+                if (trainingStatus == false) return BadRequest("Treinamento inativo");
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(CreateTrainingRegistration)}");
+
+                return CreatedAtAction("get", "matrícula realizada");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
     }

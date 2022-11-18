@@ -50,16 +50,26 @@ namespace DEVCoursesAPI.Services
         {
             return await _repository.DeleteRegistration(userID, trainingID, topicsID);
         }
+
         public async Task<Guid> CreateTrainingAsync(CreateTrainingDto dto)
         {
             Training training = (Training)dto;
             Guid trainingId = await _repository.CreateTraining(training);
 
-            foreach (var module in dto.Modules) {
+            foreach (var module in dto.Modules)
+            {
                 await _modulesService.CreateModulesAsync(module, trainingId);
             }
 
             return trainingId;
+        }
+
+        public async Task<bool> CreateTrainingRegistrationAsync(TrainingRegistrationDto dto)
+        {
+            TrainingRegistrationDto training = (TrainingRegistrationDto)dto;
+            bool trainingStatus = await _repository.CreateTrainingRegistration(training);
+
+            return trainingStatus;
         }
     }
 }

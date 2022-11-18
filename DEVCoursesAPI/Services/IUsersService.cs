@@ -10,5 +10,7 @@ public interface IUsersService
     bool Update(Users user);
     JWTResult AuthUser(LoginUser login);
 
+    bool ResetPassword(LoginUser login);
+
 
 }
