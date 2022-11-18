@@ -8,10 +8,12 @@ namespace DEVCoursesAPI.Services
     public class TrainingService : ITrainingService
     { 
         private readonly ITrainingRepository _repository;
+        private readonly IModulesService _modulesService;
 
-        public TrainingService(ITrainingRepository repository)
+        public TrainingService(ITrainingRepository repository, IModulesService modulesService)
         {
             _repository = repository;
+            _modulesService = modulesService;
         }
 
         public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
@@ -47,6 +49,19 @@ namespace DEVCoursesAPI.Services
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
             return await _repository.DeleteRegistration(userID, trainingID, topicsID);
+        }
+
+        public async Task<Guid> CreateTrainingAsync(CreateTrainingDto dto)
+        {
+            Training training = (Training)dto;
+            Guid trainingId = await _repository.CreateTraining(training);
+
+            foreach (var module in dto.Modules)
+            {
+                await _modulesService.CreateModulesAsync(module, trainingId);
+            }
+
+            return trainingId;
         }
 
         public async Task<bool> CreateTrainingRegistrationAsync(TrainingRegistrationDto dto)
