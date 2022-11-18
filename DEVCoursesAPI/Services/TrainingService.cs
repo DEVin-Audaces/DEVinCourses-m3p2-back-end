@@ -8,12 +8,10 @@ namespace DEVCoursesAPI.Services
     public class TrainingService : ITrainingService
     { 
         private readonly ITrainingRepository _repository;
-        private readonly IModulesService _modulesService;
 
-        public TrainingService(ITrainingRepository repository, IModulesService modulesService)
+        public TrainingService(ITrainingRepository repository)
         {
             _repository = repository;
-            _modulesService = modulesService;
         }
 
         public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
