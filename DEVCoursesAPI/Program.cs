@@ -59,6 +59,7 @@ builder.Services
     .AddScoped<IUsersService, UsersService>()
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IUsersRepository<Users>, UsersRepository>()
+    .AddScoped<IModulesRepository, ModulesRepository>()
     .AddScoped<ITrainingRepository<Training>, TrainingRepository>()
     .AddScoped<ITrainingService, TrainingService>()
     .AddScoped<ITopicsRepository, TopicsRepository>();
