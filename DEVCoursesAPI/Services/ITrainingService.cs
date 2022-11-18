@@ -10,5 +10,6 @@ namespace DEVCoursesAPI.Services
         Task<bool> CompleteTraining(TrainingUser trainingUser);
         Task <bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID);
         Task<ReadTrainingDto?> GetByIdAsync(Guid id);
+        Task<bool> CreateTrainingRegistrationAsync(TrainingRegistrationDto dto);
     }
 }
