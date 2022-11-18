@@ -9,5 +9,6 @@ namespace DEVCoursesAPI.Repositories
         Task<List<Topic>> GetTopics(Guid trainingId);
         Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId);
         Task UpdateTrainingUser(TrainingUser trainingUser);
+        Task<bool> CheckForActiveStudents(Guid id);
     }
 }
