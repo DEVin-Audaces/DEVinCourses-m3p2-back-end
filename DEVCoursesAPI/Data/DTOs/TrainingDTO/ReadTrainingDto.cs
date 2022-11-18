@@ -1,4 +1,4 @@
-// using DEVCoursesAPI.Data.DTOs.ModuleDTO;
+using DEVCoursesAPI.Data.DTOs.ModuleDTO;
 using DEVCoursesAPI.Data.Models;
 
 namespace DEVCoursesAPI.Data.DTOs.TrainingDTO
@@ -12,7 +12,7 @@ namespace DEVCoursesAPI.Data.DTOs.TrainingDTO
         public string Instructor { get; set; }
         public Guid Author { get; set; }
         public bool Active { get; set; }
-        // public IEnumerable<ReadModuleDto> Modules { get; set; }
+        public IEnumerable<ReadModuleDto> Modules { get; set; }
         public IEnumerable<Users> TotalStudents { get; set; }
         public IEnumerable<Users> FinishedStudents { get; set; }
         public IEnumerable<Users> ActiveStudents { get; set; }

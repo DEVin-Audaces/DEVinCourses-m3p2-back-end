@@ -1,5 +1,5 @@
 ﻿using DEVCoursesAPI.Data.DTOs;
-using DEVCoursesAPI.Data.Models;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
@@ -17,6 +17,17 @@ namespace DEVCoursesAPI.Services
         public List<TrainingNotRegistered> UserLoginTrainingsList(Guid userId)
         {
             return _repository.UserLoginTrainingsList(userId);
+        }
+        public async Task<ReadTrainingDto?> GetByIdAsync(Guid id)
+        {
+            Training? training = await _repository.GetByIdAsync(id);
+
+            if (training == null)
+                return null;
+
+            ReadTrainingDto readTrainingDto = (ReadTrainingDto)training;
+
+            return readTrainingDto;
         }
 
         public async Task<bool> CompleteTraining(TrainingUser trainingUser)

@@ -1,4 +1,4 @@
-// using DEVCoursesAPI.Data.DTOs.ModuleDTO;
+using DEVCoursesAPI.Data.DTOs.ModuleDTO;
 using DEVCoursesAPI.Data.Models;
 
 namespace DEVCoursesAPI.Data.DTOs.TrainingDTO
@@ -11,7 +11,7 @@ namespace DEVCoursesAPI.Data.DTOs.TrainingDTO
         public string Instructor { get; set; }
         public Guid Author { get; set; }
         public bool Active { get; set; }
-        // public ICollection<CreateModuleDto> Modules { get; set; }
+        public ICollection<CreateModuleDto> Modules { get; set; }
         public static explicit operator Training(CreateTrainingDto dto)
         {
             return new Training
