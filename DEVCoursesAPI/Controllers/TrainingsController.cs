@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -33,6 +34,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "200">Retorna Lista de Treinamentos</response>
         /// <response code = "500">Erro execução</response>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
@@ -68,6 +70,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "500">Erro execução</response>
         [Route("complete")]
         [HttpPut]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +112,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "404">Matrícula não encontrada</response>
         /// <response code = "500">Ocorreu erro durante a execução</response> 
         [HttpDelete]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
