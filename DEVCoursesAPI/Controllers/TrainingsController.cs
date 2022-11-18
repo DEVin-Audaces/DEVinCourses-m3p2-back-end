@@ -13,12 +13,12 @@ namespace DEVCoursesAPI.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IOptions<TrainingsController> _tokenSettings;
-        private readonly ITrainingRepository<Training> _repository;
+        private readonly ITrainingRepository _repository;
         private readonly ITrainingService _service;
 
         public TrainingsController(IOptions<TrainingsController> tokenSettings,
             ILogger<UsersController> logger,
-            ITrainingRepository<Training> repository,
+            ITrainingRepository repository,
             ITrainingService service)
         {
             _service = service;
