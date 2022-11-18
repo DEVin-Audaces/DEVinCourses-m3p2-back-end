@@ -62,7 +62,8 @@ builder.Services
     .AddScoped<IModulesRepository, ModulesRepository>()
     .AddScoped<ITrainingRepository, TrainingRepository>()
     .AddScoped<ITrainingService, TrainingService>()
-    .AddScoped<ITopicsRepository, TopicsRepository>();
+    .AddScoped<ITopicsRepository, TopicsRepository>()
+    .AddScoped<ITopicsService, TopicsService>();
 
 builder.Services
     .AddSwaggerGen(swagger =>
