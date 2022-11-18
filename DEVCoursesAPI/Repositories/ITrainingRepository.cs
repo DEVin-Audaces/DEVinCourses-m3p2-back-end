@@ -14,5 +14,6 @@ namespace DEVCoursesAPI.Repositories
         Task<Training?> GetByIdAsync(Guid id);
         Task<Guid> CreateTraining(Training training);
         Task<bool> SuspendAsync(Guid id);
+        Task<bool> CheckForActiveStudents(Guid id);
     }
 }

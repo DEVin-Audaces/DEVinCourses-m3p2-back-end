@@ -184,6 +184,17 @@ namespace DEVCoursesAPI.Repositories
                 return result > 0;
             }
         }
+
+        public async Task<bool> CheckForActiveStudents(Guid id)
+        {
+            using (var db = _dbContextFactory.CreateDbContext())
+            {
+                List<TrainingUser> trainingUsers = await db.TrainingUsers.Where(trainingusers => trainingusers.TrainingId == id).ToListAsync();
+                int activeStudents = trainingUsers.Where(tu => tu.Completed == false).Count();
+
+                return activeStudents == 0;
+            }
+        }
     }
 }
 
