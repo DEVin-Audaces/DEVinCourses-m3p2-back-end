@@ -187,7 +187,7 @@ namespace DEVCoursesAPI.Repositories
 
         public async Task<bool> CheckForActiveStudents(Guid id)
         {
-            using (var db = _dbFactory.CreateDbContext())
+            using (var db = _dbContextFactory.CreateDbContext())
             {
                 List<TrainingUser> trainingUsers = await db.TrainingUsers.Where(trainingusers => trainingusers.TrainingId == id).ToListAsync();
                 int activeStudents = trainingUsers.Where(tu => tu.Completed == false).Count();
