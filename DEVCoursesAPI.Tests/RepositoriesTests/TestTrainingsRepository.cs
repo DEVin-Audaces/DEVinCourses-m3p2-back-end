@@ -33,6 +33,21 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         }
 
         [Fact]
+        public async void GetAll_ShouldReturnListOfTrainings()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            await repository.CreateTraining(training);
+
+            // Act
+            List<Training> result = await repository.GetAll();
+
+            // Assert
+            Assert.Single(result);
+        }
+
+        [Fact]
         public async void GetByIdAsync_ShouldReturnTrainingWhenValid()
         {
             // Arrange
