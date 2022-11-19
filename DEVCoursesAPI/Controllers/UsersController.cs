@@ -55,10 +55,9 @@ public class UsersController : ControllerBase
         /// <returns>Retorna token e data de expiração do Token</returns>
         /// <response code="200">Login efetuado com sucesso</response>
         ///  <response code="500">Erro ao efetuar o login</response>
-        [HttpGet("LoginUser")]
+        [HttpPost("LoginUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         public async Task<ActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
             JWTResult jwtResult = _usersService.AuthUser(loginUser);
