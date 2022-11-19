@@ -14,11 +14,6 @@ namespace DEVCoursesAPI.Repositories
         {
             _dbContextFactory = dbContextFactory;
         }
-
-        public Guid Add(Training model)
-        {
-            throw new NotImplementedException();
-        }
         
         public IList<Training> GetAll()
         {
