@@ -10,6 +10,10 @@ public interface IUsersService
     bool Update(Users user);
     JWTResult AuthUser(LoginUser login);
 
+    public Guid GetIdToken(string authHeader);
+
+    bool Update(DataUser user, Guid id);
+
     bool ResetPassword(LoginUser login);
 
 

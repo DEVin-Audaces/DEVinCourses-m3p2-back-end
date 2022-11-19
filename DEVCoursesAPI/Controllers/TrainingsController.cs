@@ -59,23 +59,23 @@ namespace DEVCoursesAPI.Controllers
         }
 
         /// <summary>
-        /// Visualizar a tela de treinamentos
+        /// Lista de todos os treinamentos
         /// </summary>
-        /// <param name="UserId"></param>
+        /// <param name="userId"></param>
         /// <returns>Retorna os treinamentos de acordo com o Id do usuário inserido</returns>
         /// <response code = "200">Retorna Lista de Treinamentos</response>
         /// <response code = "500">Erro execução</response>
-        [HttpGet]
-        [Authorize]
+        [HttpGet("list/{userId}")]
+        //[Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<ActionResult> Get([FromQuery][Required] Guid UserId)
+        public async Task<ActionResult> GetTrainingsByUserId(Guid userId)
         {
             try
             {
-                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Get)}");
-                var trainings = _service.UserLoginTrainingsList(UserId);
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(GetTrainingsByUserId)}");
+                var trainings = _service.UserLoginTrainingsList(userId);
 
                 if (trainings == null)
                     return NotFound();
@@ -86,7 +86,7 @@ namespace DEVCoursesAPI.Controllers
 
             catch (Exception e)
             {
-                _logger.LogError(e, $"Controller:{nameof(TrainingsController)}-Method:{nameof(Get)}");
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)}-Method:{nameof(GetTrainingsByUserId)}");
                 return StatusCode(500);
             }
         }
@@ -94,27 +94,28 @@ namespace DEVCoursesAPI.Controllers
         /// <summary>
         /// Concluir Treinamento
         /// </summary>
-        /// <param></param>
+        /// <param name="userId"></param>
+        /// <param name="trainingId"></param>
         /// <returns>Retorna curso completado com sucesso</returns>
         /// <response code = "204">Concluído com sucesso</response>
         /// <response code = "400">Curso não pode ser concluído por que existem tópicos não concluídos</response>
         /// <response code = "404">Conclusão não realizada</response>
         /// <response code = "500">Erro execução</response>
-        [Route("complete")]
+        [Route("complete/{userId}/{trainingId}")]
         [HttpPut]
-        [Authorize]
+        //[Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Put([Required] Guid UserId, [Required] Guid TrainingId)
+        public async Task<ActionResult> Put(Guid userId, Guid trainingId)
         {
             try
             {
                 _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Put)}");
 
-                var trainingUser = await _repository.GetTrainingUser(UserId, TrainingId);
-                if (trainingUser == null) return StatusCode(404, $"Usuário {UserId} não está matriculado no curso {TrainingId}");
+                var trainingUser = await _repository.GetTrainingUser(userId, trainingId);
+                if (trainingUser == null) return StatusCode(404, $"Usuário {userId} não está matriculado no curso {trainingId}");
 
                 var isCompletedTraining = await _service.CompleteTraining(trainingUser);
                 if (!isCompletedTraining)
@@ -143,8 +144,8 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "204">Matrícula cancelada com sucesso</response> 
         /// <response code = "404">Matrícula não encontrada</response>
         /// <response code = "500">Ocorreu erro durante a execução</response> 
-        [HttpDelete]
-        [Authorize]
+        [HttpDelete("registration/{userID}/{trainingID}")]
+        //[Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
