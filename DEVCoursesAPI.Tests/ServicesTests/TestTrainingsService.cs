@@ -43,5 +43,23 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             // Assert
             Assert.Equal(trainingId, result);
         }
+
+        [Fact]
+        public async void GetAll_ShouldReturnListOfTrainings()
+        {
+            //Arrange
+            List<Training> list = new() { new Training(), new Training() };
+
+            _trainingsRepository.Setup(repo => repo.GetAll())
+                                .ReturnsAsync(list);
+
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+
+            // Act
+            List<Training> result = await service.GetAll();
+
+            // Assert
+            Assert.Equal(2, result.Count);
+        }
     }
 }
