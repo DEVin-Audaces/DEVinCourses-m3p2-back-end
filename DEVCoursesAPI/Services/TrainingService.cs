@@ -71,5 +71,10 @@ namespace DEVCoursesAPI.Services
 
             return trainingStatus;
         }
+
+        public async Task<List<Training>> GetAll()
+        {
+            return await _repository.GetAll();
+        }
     }
 }
