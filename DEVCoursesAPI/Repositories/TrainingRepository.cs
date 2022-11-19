@@ -3,6 +3,7 @@ using DEVCoursesAPI.Data.DTOs;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DEVCoursesAPI.Repositories
 {
@@ -256,6 +257,31 @@ namespace DEVCoursesAPI.Repositories
                 }
 
                 return result;
+            }
+        }
+
+        public async Task<List<TrainingReport>> GetReports()
+        {
+            using (var db = _dbContextFactory.CreateDbContext())
+            {
+                List<TrainingReport> reports = new();
+                List<Training> trainings = await db.Trainings.ToListAsync();
+
+                foreach (var training in trainings)
+                {
+                    int count = db.TrainingUsers
+                        .Count(tu => tu.TrainingId == training.Id && tu.Completed == true);
+
+                    reports.Add(new TrainingReport()
+                    {
+                        Name = training.Name,
+                        Duration = training.Duration,
+                        TotalFinishedStudents = count,
+                        Active = training.Active
+                    });
+                }
+
+                return reports;
             }
         }
     }

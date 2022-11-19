@@ -91,5 +91,13 @@ namespace DEVCoursesAPI.Services
         {
             return await _repository.GetUsersRegisteredInTraining(trainingId);
         }
+
+        public async Task<List<TrainingReport>> GetReports()
+        {
+            List<TrainingReport> reports = await _repository.GetReports();
+            reports.OrderBy(report => report.TotalFinishedStudents).ToList();
+
+            return reports;
+        }
     }
 }
