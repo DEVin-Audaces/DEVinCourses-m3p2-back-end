@@ -71,6 +71,7 @@ namespace DEVCoursesAPI.Services
 
             return trainingStatus;
         }
+
         public async Task<bool> SuspendAsync(Guid id)
         {
             bool noActiveStudents = await _repository.CheckForActiveStudents(id);
@@ -79,6 +80,11 @@ namespace DEVCoursesAPI.Services
                 return false;
 
             return await _repository.SuspendAsync(id);
+        }
+
+        public async Task<List<Training>> GetAll()
+        {
+            return await _repository.GetAll();
         }
     }
 }

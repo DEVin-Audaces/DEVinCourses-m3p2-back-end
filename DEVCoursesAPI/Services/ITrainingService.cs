@@ -12,6 +12,7 @@ namespace DEVCoursesAPI.Services
         Task<ReadTrainingDto?> GetByIdAsync(Guid id);
         Task<Guid> CreateTrainingAsync(CreateTrainingDto dto);
         Task<bool> CreateTrainingRegistrationAsync(TrainingRegistrationDto dto);
+        Task<List<Training>> GetAll();
         Task<bool> SuspendAsync(Guid id);
     }
 }
