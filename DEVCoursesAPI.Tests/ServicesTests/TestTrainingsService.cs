@@ -102,5 +102,28 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             // Assert
             Assert.Null(trainingDto);
         }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async void SuspendAsync_ShouldReturnTrueOnlyWhenThereAreNoActiveStudents(bool noActiveStudent)
+        {
+            // Arrange
+            Guid trainingId = Guid.NewGuid();
+
+            _trainingsRepository.Setup(repo => repo.CheckForActiveStudents(trainingId))
+                .ReturnsAsync(noActiveStudent);
+
+            _trainingsRepository.Setup(repo => repo.SuspendAsync(trainingId))
+                .ReturnsAsync(true);
+
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+
+            // Act
+            bool result = await service.SuspendAsync(trainingId);
+
+            // Assert
+            Assert.Equal(noActiveStudent, result);
+        }
     }
 }
