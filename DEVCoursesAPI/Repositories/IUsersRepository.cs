@@ -6,4 +6,6 @@ namespace DEVCoursesAPI.Repositories;
 public interface IUsersRepository<TEntity> : IEntity<TEntity>
 {
     Users GetEmail(string email);
+
+    Users GetId(Guid id);
 }
