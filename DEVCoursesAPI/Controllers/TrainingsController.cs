@@ -222,5 +222,32 @@ namespace DEVCoursesAPI.Controllers
                 return StatusCode(500);
             }
         }
+
+        /// <summary>
+        /// Busca listas relatórios de treinamento
+        /// </summary>
+        /// <returns>Retorna lista relatórios de treinamento</returns>
+        /// <response code = "200">Retorna lista de relatórios</response>
+        /// <response code = "404">Nenhum treinamento encontrado</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpGet("report")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<TrainingReport>>> GetTrainingReports()
+        {
+            try
+            {
+                List<TrainingReport> result = await _service.GetReports();
+
+                return result.Any() ? Ok(result) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
     }
 }
