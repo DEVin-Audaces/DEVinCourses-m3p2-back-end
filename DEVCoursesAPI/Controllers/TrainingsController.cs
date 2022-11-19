@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using Microsoft.AspNetCore.Authorization;
+using DEVCoursesAPI.Data.DTOs;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -190,6 +191,34 @@ namespace DEVCoursesAPI.Controllers
             {
                 _logger.LogError(ex.Message);
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Busca listas de usuários ativos e concluintes de um treinamento
+        /// </summary>
+        /// <param name="id">Id do treinamento</param>
+        /// <returns>Retorna listas de usuários registrados no treinamento</returns>
+        /// <response code = "200">Retorna as listas encontradas</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpGet("{trainingId}/registered-users/")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<RegisteredUsers>> GetUsersRegisteredInTraining(Guid trainingId)
+        {
+            try
+            {
+                RegisteredUsers result = await _service.GetUsersRegisteredInTraining(trainingId);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(GetUsersRegisteredInTraining)}");
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
             }
         }
     }
