@@ -39,7 +39,9 @@ public class UsersRepository : IUsersRepository<Users>
 
     public Users GetId(Guid id)
     {
-        throw new NotImplementedException();
-    }
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            return  context.Users.Where(q => q.Id == id).FirstOrDefault();
+        }    }
 }
     
