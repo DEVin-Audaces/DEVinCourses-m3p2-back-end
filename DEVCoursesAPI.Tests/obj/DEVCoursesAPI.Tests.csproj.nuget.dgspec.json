@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {}
+    "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {
+    "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
         "projectName": "DEVCoursesAPI.Tests",
-        "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
-        "packagesPath": "C:\\Users\\matheus.gevartosky\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\obj\\",
+        "projectPath": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\DEVCoursesAPI.Tests.csproj",
+        "packagesPath": "C:\\Users\\bruno\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI.Tests\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\matheus.gevartosky\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\bruno\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -32,8 +28,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
-                "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj"
+              "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
+                "projectPath": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj"
               }
             }
           }
@@ -101,25 +97,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
+    "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
+        "projectUniqueName": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
         "projectName": "DEVCoursesAPI",
-        "projectPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
-        "packagesPath": "C:\\Users\\matheus.gevartosky\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\matheus.gevartosky\\Desktop\\projeto final banckend\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\obj\\",
+        "projectPath": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\DEVCoursesAPI.csproj",
+        "packagesPath": "C:\\Users\\bruno\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\bruno\\Desktop\\ME\\Estudos\\Programação-Estudo-DEVinHouse-Modulo3\\Projeto2\\Back-end\\Clone 4\\DEVinCourses-m3p2-back-end\\DEVCoursesAPI\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\matheus.gevartosky\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\bruno\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -205,7 +197,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
