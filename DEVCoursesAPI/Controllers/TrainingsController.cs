@@ -6,6 +6,7 @@ using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using Microsoft.AspNetCore.Authorization;
 using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.Models;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -26,6 +27,33 @@ namespace DEVCoursesAPI.Controllers
             _service = service;
             _logger = logger;
             _repository = repository;
+        }
+
+        /// <summary>
+        /// Busca todos os treinamentos
+        /// </summary>
+        /// <returns>Retorna lista de treinamentos</returns>
+        /// <response code = "200">Retorna lista de treinamentos</response>
+        /// <response code = "404">Nenhum treinamento encontrado</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpGet]
+        //[Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Training>>> Get()
+        {
+            try
+            {
+                List<Training> trainings = await _repository.GetAll();
+
+                return trainings.Any() ? Ok(trainings): NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
