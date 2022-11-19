@@ -15,14 +15,12 @@ namespace DEVCoursesAPI.Repositories
             _dbContextFactory = dbContextFactory;
         }
 
-        public Guid Add(Training model)
+        public async Task<List<Training>> GetAll()
         {
-            throw new NotImplementedException();
-        }
-        
-        public IList<Training> GetAll()
-        {
-            throw new NotImplementedException();
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                return await context.Trainings.ToListAsync();
+            }
         }
         public async Task<Training?> GetByIdAsync(Guid id)
         {
