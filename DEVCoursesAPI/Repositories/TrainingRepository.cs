@@ -227,6 +227,37 @@ namespace DEVCoursesAPI.Repositories
                 return true;
             }
         }
+
+        public async Task<RegisteredUsers> GetUsersRegisteredInTraining(Guid trainingId)
+        {
+            using (var db = _dbContextFactory.CreateDbContext())
+            {
+                RegisteredUsers result = new ();
+
+                var query = await db.TrainingUsers
+                    .Where(trainingUsers => trainingUsers.TrainingId == trainingId)
+                    .Join(
+                            db.Users,
+                            trainingUsers => trainingUsers.UserId,
+                            users => users.Id,
+                            (trainingUsers, users) => new
+                            {
+                                Name = users.Name,
+                                Completed = trainingUsers.Completed
+                            })
+                    .ToListAsync();
+
+                foreach (var user in query)
+                {
+                    if (user.Completed == true)
+                        result.FinishedUsers.Add(user.Name);
+                    else
+                        result.ActiveUsers.Add(user.Name);
+                }
+
+                return result;
+            }
+        }
     }
 }
 
