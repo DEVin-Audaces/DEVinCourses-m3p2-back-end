@@ -6,6 +6,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
     public class TestTrainingsRepository
     {
         private readonly Training training;
+        private readonly Users user;
 
         public TestTrainingsRepository()
         {
@@ -17,6 +18,15 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
                 Instructor = "Instructor",
                 Author = Guid.NewGuid(),
                 Active = false
+            };
+
+            user = new Users()
+            {
+                    Name = "tese",
+                    Email = "adsfasdd@gmail.com",
+                    Age = 18,
+                    CPF = 2555622,
+                    Password = "senhra"
             };
         }
         [Fact]
@@ -108,6 +118,34 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
 
             // Assert
             Assert.False(result);
+        }
+
+        [Fact]
+        public async void GetTopics_ShouldReturnTopicsList()
+        {
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+
+            var listTopics = await repository.GetTopics(trainingId);
+
+            Assert.IsType<List<Topic>>(listTopics);
+        }
+
+        [Fact]
+        public async void GetFilteredTopicUsers()
+        {
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            UsersRepository userRepository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+            Guid userId = userRepository.Add(user);
+
+            var topics = await repository.GetTopics(trainingId);
+
+            var listTopics = await repository.GetFilteredTopicUsers(topics, userId);
+
+            Assert.IsType<List<TopicUser>>(listTopics);
         }
     }
 }
