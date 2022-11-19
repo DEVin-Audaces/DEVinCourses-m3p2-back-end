@@ -88,5 +88,19 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             // Assert
             Assert.Equal(trainingId, trainingDto.Id);
         }
+
+        [Fact]
+        public async void GetByIdAsync_ShouldReturnNullWhenInvalid()
+        {
+            // Arrange
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+            Guid invalidId = Guid.NewGuid();
+
+            // Act
+            ReadTrainingDto? trainingDto = await service.GetByIdAsync(invalidId);
+
+            // Assert
+            Assert.Null(trainingDto);
+        }
     }
 }
