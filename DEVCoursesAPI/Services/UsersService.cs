@@ -31,9 +31,69 @@ public class UsersService: IUsersService
         throw new NotImplementedException();
     }
 
-    public bool Update(Users user)
+        private void validateUser(DataUser user)
+
     {
-        throw new NotImplementedException();
+        if (user.CPF == 0)
+            throw new Exception("CPF é obrigatório");
+        
+        if (user.Name.Length < 3)
+            throw new Exception("Nome deve possuir no mínimo 3 caracteres e apenas caracteres alfabético");
+
+        Regex regex = new Regex(@"^[a-záéíóúõãçàâêô ]+$", RegexOptions.IgnoreCase);
+
+        Match m = regex.Match(user.Name);
+        
+        if (!m.Success)
+            throw new Exception("Nome deve possuir no mínimo 3 caracteres e apenas caracteres alfabético");
+
+        this.ValidatePassword(user.Password);
+
+        
+        regex = new Regex(@"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+
+        m = regex.Match(user.Email);
+        
+        if (!m.Success)
+            throw new Exception("E-mail possui formato inválido");
+        
+        if (user.Age < 18 )
+            throw new Exception("Usuário deverá possuir idade maior ou igual a 18 anos");
+
+        if (user.Password != user.PasswordRepeat )
+            throw new Exception("As senhas não conferem");
+
+    }
+
+    public bool Update(DataUser user, Guid id)
+    {
+        
+        validateUser(user);
+
+        Users currentUser = this.UserSearchId(id);
+
+        if (currentUser.CPF != user.CPF )
+            throw new Exception("Não é permitido a troca do CPF");
+
+        if (currentUser.Email != user.Email )
+            throw new Exception("Não é permitido a troca do E-mail");
+
+        
+        currentUser.Age = user.Age;
+        currentUser.Name = user.Name;
+        currentUser.Password = _passwordHasher.CreateHash(user.Password);
+
+        return _usersRepository.Update(currentUser);
+    }
+
+    private Users UserSearchId(Guid id)
+    {
+        var currentUser = _usersRepository.GetId(id);
+        
+        if (currentUser == null)
+            throw new Exception("Usuário não encontrado");
+
+        return currentUser;
     }
 
     public JWTResult AuthUser(LoginUser login )

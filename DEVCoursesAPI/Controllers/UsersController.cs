@@ -1,6 +1,8 @@
+using System.Text.Json;
 using DEVCoursesAPI.Data.DTOs;
 using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -10,82 +12,105 @@ namespace DEVCoursesAPI.Controllers;
 [ApiController]
 public class UsersController : ControllerBase
 {
-        private readonly ILogger<UsersController> _logger;
-        private readonly IUsersService _usersService;
+    private readonly ILogger<UsersController> _logger;
+    private readonly IUsersService _usersService;
 
-        public UsersController(IUsersService usersService, ILogger<UsersController> logger)
+    public UsersController(IUsersService usersService, ILogger<UsersController> logger)
+    {
+        _usersService = usersService;
+        _logger = logger;
+    }
+
+
+    /// <summary>
+    /// Inserir usuário
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns>Retorna Id do usuário inserido</returns>
+    /// <response code = "201">Usuário inserido com sucesso</response>
+    /// <response code = "400">Inserção não realizada</response>
+    /// <response code = "500">Erro execução</response>
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> Post([FromBody] DataUser user)
+    {
+        try
         {
-            _usersService = usersService;
-            _logger = logger;
-        }
-
-
-        /// <summary>
-        /// Inserir usuário
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns>Retorna Id do usuário inserido</returns>
-        /// <response code = "201">Usuário inserido com sucesso</response>
-        /// <response code = "400">Inserção não realizada</response>
-        /// <response code = "500">Erro execução</response>
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Post([FromBody] DataUser user)
-        {
-            try
-            {
-                return StatusCode(201); ;
-
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, $"Controller:{nameof(UsersController)} - Method:{nameof(Post)}");
-                return StatusCode(500, e.Message);
-            }
+            return StatusCode(201); ;
 
         }
-        
-            
-        /// <summary>
-        /// Login de usuário
-        /// </summary>
-        /// <param name="LoginUser"></param>
-        /// <returns>Retorna token e data de expiração do Token</returns>
-        /// <response code="200">Login efetuado com sucesso</response>
-        ///  <response code="500">Erro ao efetuar o login</response>
-        [HttpGet("LoginUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
-        public async Task<ActionResult> UserLogin([FromQuery] LoginUser loginUser)
+        catch (Exception e)
         {
-            JWTResult jwtResult = _usersService.AuthUser(loginUser);
-            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UserLogin)} - JwtResult: {jwtResult}");
-                
-            return StatusCode(200, jwtResult); ;
-
+            _logger.LogError(e, $"Controller:{nameof(UsersController)} - Method:{nameof(Post)}");
+            return StatusCode(500, e.Message);
         }
 
-        /// <summary>
-        /// Resetar senha do usuário
-        /// </summary>
-        /// <param name="LoginUser"></param>
-        /// <returns>Retorna se foi atualizado a senha no banco</returns>
-        /// <response code="200">Senha resetada com sucesso</response>
-        /// <response code="500">Erro ao efetuar a reinicialização da senha</response>
-        [HttpPut("ResetPassword")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> ResetPassword([FromBody] LoginUser loginUser)
-        {
-            bool updatePassword = _usersService.ResetPassword(loginUser);
-            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(ResetPassword)} - UpdatePassword: {updatePassword}");
+    }
 
-            return StatusCode(200, updatePassword); ;
 
-        }
+    /// <summary>
+    /// Login de usuário
+    /// </summary>
+    /// <param name="LoginUser"></param>
+    /// <returns>Retorna token e data de expiração do Token</returns>
+    /// <response code="200">Login efetuado com sucesso</response>
+    ///  <response code="500">Erro ao efetuar o login</response>
+    [HttpGet("LoginUser")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+    public async Task<ActionResult> UserLogin([FromQuery] LoginUser loginUser)
+    {
+        JWTResult jwtResult = _usersService.AuthUser(loginUser);
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UserLogin)} - JwtResult: {jwtResult}");
+
+        return StatusCode(200, jwtResult); ;
+
+    }
+
+    /// <summary>
+    /// Resetar senha do usuário
+    /// </summary>
+    /// <param name="LoginUser"></param>
+    /// <returns>Retorna se foi atualizado a senha no banco</returns>
+    /// <response code="200">Senha resetada com sucesso</response>
+    /// <response code="500">Erro ao efetuar a reinicialização da senha</response>
+    [HttpPut("ResetPassword")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> ResetPassword([FromBody] LoginUser loginUser)
+    {
+        bool updatePassword = _usersService.ResetPassword(loginUser);
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(ResetPassword)} - UpdatePassword: {updatePassword}");
+
+        return StatusCode(200, updatePassword); ;
+
+    }
+
+    /// <summary>
+    /// Atualizar usuário
+    /// </summary>
+    /// <param name="DataUser"></param>
+    /// <returns>Retorna a situação se usuário foi atualizado</returns>
+    /// <response code = "200">Usuário atualizado com sucesso</response>
+    /// <response code = "500">Erro execução</response>
+    [HttpPut("UpdateUser")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> UpdateUser([FromBody] DataUser user)
+    {
+
+        var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        Guid id = _usersService.GetIdToken(authHeader);
+
+        bool updateUser = _usersService.Update(user, id);
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UpdateUser)} - Atualizado: {updateUser}");
+        return StatusCode(200, JsonSerializer.Serialize(updateUser));
+    }
+
 
 
 
