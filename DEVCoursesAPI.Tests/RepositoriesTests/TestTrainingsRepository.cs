@@ -133,19 +133,51 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         }
 
         [Fact]
-        public async void GetFilteredTopicUsers()
+        public async void GetFilteredTopicUsers_ShouldReturnFilteredTopicUserList()
         {
+            // Arrange
             TrainingRepository repository = new(new TestCoursesDbContextFactory());
             UsersRepository userRepository = new(new TestCoursesDbContextFactory());
 
             Guid trainingId = await repository.CreateTraining(training);
             Guid userId = userRepository.Add(user);
 
+            // Act
             var topics = await repository.GetTopics(trainingId);
+            var topicsUser = await repository.GetFilteredTopicUsers(topics, userId);
+            var topicsEqualTopicsUser = topics.Join(topicsUser,
+                    topic => topic.Id,
+                    topicUser => topicUser.TopicId,
+                    (_, topicUser) => topicUser)
+                .ToList();
 
-            var listTopics = await repository.GetFilteredTopicUsers(topics, userId);
+            // Assert
+            Assert.IsType<List<TopicUser>>(topicsUser);
+            Assert.Equal(topics.Count, topicsUser.Count);
+            Assert.Equal(topics.Count, topicsEqualTopicsUser.Count);
+        }
 
-            Assert.IsType<List<TopicUser>>(listTopics);
+        [Fact]
+        public async void GetFilteredTopicUsers_ShouldNotReturnFilteredTopicUserList()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            UsersRepository userRepository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+            Guid userId = Guid.NewGuid();
+
+            // Act
+            var topics = await repository.GetTopics(trainingId);
+            var topicsUser = await repository.GetFilteredTopicUsers(topics, userId);
+            var topicsEqualTopicsUser = topics.Join(topicsUser,
+                    topic => topic.Id,
+                    topicUser => topicUser.TopicId,
+                    (_, topicUser) => topicUser)
+                .ToList();
+
+            // Assert
+            Assert.Equal(0, topicsUser.Count);
         }
     }
 }
