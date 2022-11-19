@@ -24,7 +24,7 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             CreateTopicDto topicDto = new();
 
             Task result = service.CreateTopicsAsync(topicDto, moduleId);
-
+            
             Assert.True(result.IsCompleted);
 
         }
