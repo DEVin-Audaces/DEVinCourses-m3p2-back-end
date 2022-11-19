@@ -62,5 +62,52 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
             Assert.NotNull(result);
             Assert.Equal(trainingId, result.Id);
         }
+
+        [Fact]
+        public async void GetByIdAsync_ShouldReturnNullWhenInvalid()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            Guid invalidId = Guid.NewGuid();
+
+            // Act
+            Training? result = await repository.GetByIdAsync(invalidId);
+
+            // Assert
+            Assert.Null(result);
+        }
+
+        [Fact]
+        public async void SuspendAsync_ShouldSuspendActiveTraining()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            training.Active = true;
+            Guid trainingId = await repository.CreateTraining(training);
+
+            // Act
+            bool result = await repository.SuspendAsync(trainingId);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async void SuspendAsync_ShouldNotSuspendInactiveTraining()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            training.Active = false;
+            Guid trainingId = await repository.CreateTraining(training);
+
+            // Act
+            bool result = await repository.SuspendAsync(trainingId);
+
+            // Assert
+            Assert.False(result);
+        }
     }
 }
