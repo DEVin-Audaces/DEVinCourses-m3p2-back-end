@@ -47,6 +47,8 @@ namespace DEVCoursesAPI.Controllers
             {
                 List<Training> trainings = await _repository.GetAll();
 
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(Get)}");
+
                 return trainings.Any() ? Ok(trainings): NotFound();
             }
             catch (Exception ex)
