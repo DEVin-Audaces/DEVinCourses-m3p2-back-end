@@ -36,5 +36,10 @@ public class UsersRepository : IUsersRepository<Users>
             return  context.Users.Where(q => q.Email.ToLower() == email.ToLower()).FirstOrDefault(); 
         }
     }
+
+    public Users GetId(Guid id)
+    {
+        throw new NotImplementedException();
+    }
 }
     

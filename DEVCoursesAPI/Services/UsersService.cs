@@ -49,7 +49,17 @@ public class UsersService: IUsersService
 
         return CreateToken(currentUser);
     }
-    
+
+    public Guid GetIdToken(string authHeader)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Update(DataUser user, Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     private Users UserSearchEmail(string email)
     {
         var currentUser = _usersRepository.GetEmail(email);
