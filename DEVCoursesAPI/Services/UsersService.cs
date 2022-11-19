@@ -84,6 +84,16 @@ public class UsersService: IUsersService
 
         return _usersRepository.Update(currentUser);    }
 
+        private Users UserSearchId(Guid id)
+    {
+        var currentUser = _usersRepository.GetId(id);
+        
+        if (currentUser == null)
+            throw new Exception("Usuário não encontrado");
+
+        return currentUser;
+    }
+
     public JWTResult AuthUser(LoginUser login )
     {
         var currentUser = this.UserSearchEmail(login.Email);
