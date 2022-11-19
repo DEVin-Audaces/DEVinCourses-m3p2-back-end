@@ -31,5 +31,21 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
             // Assert
             Assert.IsType<Guid>(result);
         }
+
+        [Fact]
+        public async void GetByIdAsync_ShouldReturnTrainingWhenValid()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+
+            // Act
+            Training? result = await repository.GetByIdAsync(trainingId);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(trainingId, result.Id);
+        }
     }
 }
