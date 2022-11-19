@@ -18,5 +18,6 @@ namespace DEVCoursesAPI.Repositories
         Task<bool> CheckForActiveStudents(Guid id);
         Task<bool> CreateTrainingRegistration(TrainingRegistrationDto trainingRegistrationDto);
         Task<List<Training>> GetAll();
+        Task<RegisteredUsers> GetUsersRegisteredInTraining(Guid trainingId);
     }
 }
