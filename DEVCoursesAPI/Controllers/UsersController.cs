@@ -59,10 +59,10 @@ public class UsersController : ControllerBase
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<ActionResult> UserLogin([FromQuery] LoginUser loginUser)
+        public async Task<ActionResult> LoginUser([FromBody] LoginUser loginUser)
         {
             JWTResult jwtResult = _usersService.AuthUser(loginUser);
-            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UserLogin)} - JwtResult: {jwtResult}");
+            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(LoginUser)} - JwtResult: {jwtResult}");
                 
             return StatusCode(200, jwtResult); ;
 

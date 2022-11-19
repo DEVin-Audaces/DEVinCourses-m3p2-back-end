@@ -22,12 +22,12 @@ public class UserIntegrationTests: ConfigurationHostApi
         var returns = await client.PostAsync(serv,contentString);
 
         serv = "/users/LoginUser";
-        string email = "Email=raiche%40gmail.com";
-        string password = "Password=RRR1525B";
-        var enders = $"{serv}?{email}&{password}";
+        var bodyLogin = new LoginUser{Email = "raiche@gmail.com", Password = "RRR1525B"};
+        jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         //Act
-        returns = await client.GetAsync(enders);
+        returns = await client.PostAsync(serv, contentString);
 
         //Assert
         Assert.True(returns.IsSuccessStatusCode);
@@ -43,12 +43,12 @@ public class UserIntegrationTests: ConfigurationHostApi
     {
         //Arrange
         string serv = "/users/LoginUser";
-        string email = "Email=raiche%40gmail.com";
-        string password = "Password=RRR1525C";
-        var enders = $"{serv}?{email}&{password}";
+        var bodyLogin = new LoginUser{Email = "raiche@gmail.com", Password = "RRR1525C"};
+        var jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
         //Act
-        var returns = await client.GetAsync(enders);
+        var returns = await client.PostAsync(serv, contentString);
 
         //Assert
         Assert.False(returns.IsSuccessStatusCode);
