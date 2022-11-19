@@ -43,5 +43,64 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             // Assert
             Assert.Equal(trainingId, result);
         }
+
+        [Fact]
+        public async void GetAll_ShouldReturnListOfTrainings()
+        {
+            //Arrange
+            List<Training> list = new() { new Training(), new Training() };
+
+            _trainingsRepository.Setup(repo => repo.GetAll())
+                                .ReturnsAsync(list);
+
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+
+            // Act
+            List<Training> result = await service.GetAll();
+
+            // Assert
+            Assert.Equal(2, result.Count);
+        }
+
+        [Fact]
+        public async void GetByIdAsync_ShouldReturnTrainingWhenValid()
+        {
+            // Arrange
+            Guid trainingId = Guid.NewGuid();
+            Training training = new()
+            {
+                Id = trainingId,
+                Author = Guid.NewGuid(),
+                Instructor = "Instructor",
+                Modules = new List<Module>(),
+                Name = "Name",
+                Summary = "Summary"
+            };
+
+            _trainingsRepository.Setup(repo => repo.GetByIdAsync(trainingId))
+                .ReturnsAsync(training);
+
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+
+            // Act
+            ReadTrainingDto? trainingDto = await service.GetByIdAsync(trainingId);
+
+            // Assert
+            Assert.Equal(trainingId, trainingDto.Id);
+        }
+
+        [Fact]
+        public async void GetByIdAsync_ShouldReturnNullWhenInvalid()
+        {
+            // Arrange
+            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+            Guid invalidId = Guid.NewGuid();
+
+            // Act
+            ReadTrainingDto? trainingDto = await service.GetByIdAsync(invalidId);
+
+            // Assert
+            Assert.Null(trainingDto);
+        }
     }
 }
