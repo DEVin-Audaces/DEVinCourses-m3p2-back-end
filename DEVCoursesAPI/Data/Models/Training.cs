@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.DTOs.ModuleDTO;
+using System.Text.Json.Serialization;
 
 namespace DEVCoursesAPI.Data.Models
 {
@@ -16,6 +17,7 @@ namespace DEVCoursesAPI.Data.Models
         public string Instructor { get; set; }
         public Guid Author { get; set; }
         public bool Active { get; set; }
+        [JsonIgnore]
         public List<Module> Modules { get; set; }
 
         public static explicit operator ReadTrainingDto(Training training)
