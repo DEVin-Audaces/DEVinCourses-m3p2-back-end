@@ -13,8 +13,5 @@ namespace DEVCoursesAPI.Data.DTOs.TrainingDTO
         public Guid Author { get; set; }
         public bool Active { get; set; }
         public IEnumerable<ReadModuleDto> Modules { get; set; }
-        public IEnumerable<Users> TotalStudents { get; set; }
-        public IEnumerable<Users> FinishedStudents { get; set; }
-        public IEnumerable<Users> ActiveStudents { get; set; }
     }
 }
