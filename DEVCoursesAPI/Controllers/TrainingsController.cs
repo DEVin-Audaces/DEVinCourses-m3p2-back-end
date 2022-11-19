@@ -28,6 +28,36 @@ namespace DEVCoursesAPI.Controllers
         }
 
         /// <summary>
+        /// Busca um treinamento pelo seu Id
+        /// </summary>
+        /// <param name="id">Id do treinamento</param>
+        /// <returns>Retorna treinamento encontrado</returns>
+        /// <response code = "200">Retorna o treinamento</response>
+        /// <response code = "404">Nenhum treinamento encontrado com o Id fornecido</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpGet("{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ReadTrainingDto>> GetTrainingById(Guid id)
+        {
+            try
+            {
+                ReadTrainingDto? training = await _service.GetByIdAsync(id);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(GetTrainingById)}");
+
+                return training == null ? NotFound() : Ok(training);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
         /// Visualizar a tela de treinamentos
         /// </summary>
         /// <param name="UserId"></param>
