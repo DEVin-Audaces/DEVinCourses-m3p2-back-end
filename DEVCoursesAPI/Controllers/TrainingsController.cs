@@ -1,7 +1,6 @@
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using Microsoft.AspNetCore.Authorization;
@@ -18,13 +17,16 @@ namespace DEVCoursesAPI.Controllers
         private readonly IOptions<TrainingsController> _tokenSettings;
         private readonly ITrainingRepository _repository;
         private readonly ITrainingService _service;
+        private readonly ITopicsService _topicService;
         public TrainingsController(
             IOptions<TrainingsController> tokenSettings,
             ILogger<TrainingsController> logger,
             ITrainingRepository repository,
-            ITrainingService service)
+            ITrainingService service,
+            ITopicsService topicService)
         {
             _service = service;
+            _topicService = topicService;
             _logger = logger;
             _repository = repository;
         }
@@ -156,7 +158,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "200">Retorna Lista de IDs de Treinamentos</response>
         /// <response code = "500">Erro execução</response>
         [HttpGet("list/registered/{userId}")]
-        // [Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetRegisteredTrainings(Guid userId)
@@ -197,11 +199,11 @@ namespace DEVCoursesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Put(Guid userId, Guid trainingId)
+        public async Task<ActionResult> CompleteTraining(Guid userId, Guid trainingId)
         {
             try
             {
-                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Put)}");
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(CompleteTraining)}");
 
                 var trainingUser = await _repository.GetTrainingUser(userId, trainingId);
                 if (trainingUser == null) return StatusCode(404, $"Usuário {userId} não está matriculado no curso {trainingId}");
@@ -217,7 +219,42 @@ namespace DEVCoursesAPI.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(Put)}");
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(CompleteTraining)}");
+                return StatusCode(500, e.Message);
+            }
+
+        }
+        
+        /// <summary>
+        /// Concluir Tópico
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="trainingId"></param>
+        /// <returns>Retorna tópico completado com sucesso</returns>
+        /// <response code = "204">Concluído com sucesso</response>
+        /// <response code = "404">Conclusão não realizada</response>
+        /// <response code = "500">Erro execução</response>
+        [Route("completeTopic/{userId}/{topicId}")]
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CompleteTopic(Guid userId, Guid topicId)
+        {
+            try
+            {
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(CompleteTopic)}");
+
+                var topicUser = await _topicService.CompleteTopic(userId, topicId);
+                if (!topicUser) return StatusCode(404, $"Tópico não encontrado");
+
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(CompleteTopic)}");
                 return StatusCode(500, e.Message);
             }
 
