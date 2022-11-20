@@ -89,6 +89,34 @@ namespace DEVCoursesAPI.Controllers
         }
 
         /// <summary>
+        /// Cadastra um novo treinamento
+        /// </summary>
+        /// <param name="nameof(trainingDto)">Treinamento</param>
+        /// <returns>Retorna o Id do treinamento cadastrado</returns>
+        /// <response code = "201">Retorna o Id do treinamento cadastrado</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingDto trainingDto)
+        {
+            try
+            {
+                Guid trainingId = await _service.CreateTrainingAsync(trainingDto);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(CreateTraining)}");
+
+                return CreatedAtAction(nameof(Get), new { Id = trainingId });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
         /// Lista de todos os treinamentos
         /// </summary>
         /// <param name="userId"></param>
