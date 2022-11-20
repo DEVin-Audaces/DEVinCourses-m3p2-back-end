@@ -97,7 +97,51 @@ public class UserIntegrationTests: ConfigurationHostApi
 
     }
 
-    
+    [Fact]
+    public async Task E_Consumir_Api_Reset_Password_Put_Sucesso()
+    {
+        //Arrange
+        string serv = "/users/CreateUser";
+        var body = new DataUser { Name = "Lucas Pereira", Age = 40, Email = "lucaspereira@gmail.com", CPF = 1551152260, Password = "AAAA2222", PasswordRepeat = "AAAA2222" };
+        var jsonContent = JsonConvert.SerializeObject(body);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        var returns = await client.PostAsync(serv, contentString);
+
+        serv = "/users/ResetPassword";
+        var bodyLogin = new LoginUser { Email = "lucaspereira@gmail.com", Password = "AAAA2223" };
+        jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        //Act
+        returns = await client.PutAsync(serv, contentString);
+
+        //Assert
+        Assert.True(returns.IsSuccessStatusCode);
+
+        jsonContent = await returns.Content.ReadAsStringAsync();
+
+        Assert.NotEqual("", jsonContent);
+    }
+
+    [Fact]
+    public async Task F_Consumir_Api_Reset_Password_Put_Sem_Sucesso()
+    {
+        //Arrange
+        var serv = "/users/ResetPassword";
+        var bodyLogin = new LoginUser { Email = "lucaspereiraL@gmail.com", Password = "AAAA2223" };
+        var jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        //Act
+        var returns = await client.PutAsync(serv, contentString);
+
+        //Assert
+        Assert.False(returns.IsSuccessStatusCode);
+
+    }
+
+
     [Fact]
     public async Task G_Consumir_Api_Update_User_Put_Sucesso()
     {
