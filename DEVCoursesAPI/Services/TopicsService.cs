@@ -18,6 +18,15 @@ namespace DEVCoursesAPI.Services
             Topic topic = (Topic)topicDto;
             topic.ModuleId = moduleId;
 
+            if (topic.Content.Contains("watch?v="))
+                topic.Content = topic.Content.Replace("watch?v=", "embed/");
+
+            if (topic.Content.Contains("&"))
+            {
+                int index = topic.Content.IndexOf("&");
+                topic.Content = topic.Content.Substring(0, index);
+            }
+
             await _topicsRepository.CreateAsync(topic);
         }
     }
