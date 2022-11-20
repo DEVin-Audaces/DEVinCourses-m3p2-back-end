@@ -1,4 +1,5 @@
-﻿using DEVCoursesAPI.Data.Models;
+﻿using DEVCoursesAPI.Data.DTOs.TrainingDTO;
+using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
 namespace DEVCoursesAPI.Tests.RepositoriesTests
@@ -109,5 +110,45 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
             // Assert
             Assert.False(result);
         }
+
+        [Fact]
+        public async void CreateTrainingRegistration_ShouldReturnTrueWhenCreatingTrainingRegistration()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            training.Active = true;
+            Guid trainingId = await repository.CreateTraining(training);
+            TrainingRegistrationDto trainingRegistrationDto = new TrainingRegistrationDto();
+            trainingRegistrationDto.TrainingId = trainingId;
+            trainingRegistrationDto.UserId = Guid.NewGuid();
+            trainingRegistrationDto.TopicIds = new List<Guid>();
+            trainingRegistrationDto.TopicIds.Prepend(Guid.NewGuid());
+
+            // Act
+            bool result = await repository.CreateTrainingRegistration(trainingRegistrationDto);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async void CreateTrainingRegistration_ShouldReturnFalseWhenCreatingTrainingRegistration()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            Guid trainingId = await repository.CreateTraining(training);
+            TrainingRegistrationDto trainingRegistrationDto = new TrainingRegistrationDto();
+            trainingRegistrationDto.TrainingId = trainingId;
+            trainingRegistrationDto.UserId = Guid.NewGuid();
+            trainingRegistrationDto.TopicIds = new List<Guid>();
+            trainingRegistrationDto.TopicIds.Prepend(Guid.NewGuid());
+
+            // Act
+            bool result = await repository.CreateTrainingRegistration(trainingRegistrationDto);
+
+            // Assert
+            Assert.False(result);
+        }
+
     }
 }
