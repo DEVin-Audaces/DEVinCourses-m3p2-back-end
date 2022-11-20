@@ -652,11 +652,10 @@ public class UserServiceTests
         Guid idNew = usersService.Add(user);
 
         //Act
-        //var profile = usersService.Get(idNew);
+        var profile = usersService.Get(idNew);
             
         //Assert
-        //Assert.Equal(email, profile.Email);
-        //Assert.Equal(CPF, profile.CPF);
+        Assert.Equal(email, profile.Email);
 
     }
 
@@ -672,10 +671,10 @@ public class UserServiceTests
         var id = new Guid("9f5c683d-bE1b-4078-2fD4-08daca7a1db8");
 
         //Act
-        //var exception = Assert.Throws<Exception>(() => { usersService.Get(id); });
+        var exception = Assert.Throws<Exception>(() => { usersService.Get(id); });
             
         //Assert
-        //Assert.Equal(message, exception.Message);
+        Assert.Equal(message, exception.Message);
 
     }
     

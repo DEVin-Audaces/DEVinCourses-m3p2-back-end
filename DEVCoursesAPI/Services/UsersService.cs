@@ -48,11 +48,6 @@ public class UsersService: IUsersService
         return newUser.Id;
     }
 
-    public bool Update(Users user)
-    {
-        throw new NotImplementedException();
-    }
-
     public JWTResult AuthUser(LoginUser login )
     {
         var currentUser = this.UserSearchEmail(login.Email);
@@ -69,12 +64,51 @@ public class UsersService: IUsersService
 
     public Guid GetIdToken(string authHeader)
     {
-        throw new NotImplementedException();
+        Guid id = new Guid(); 
+                
+        if (authHeader != null && authHeader.StartsWith("bearer", StringComparison.OrdinalIgnoreCase))
+        {
+            var tokenStr = authHeader.Substring("Bearer ".Length).Trim();
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadToken(tokenStr) as JwtSecurityToken;
+            var idToken = token.Claims.First(claim => claim.Type.Contains("jti")).Value;
+
+            id = new Guid(idToken.ToUpper());
+        }
+
+        return id;
     }
 
     public bool Update(DataUser user, Guid id)
     {
-        throw new NotImplementedException();
+        validateUser(user);
+
+                Users currentUser = this.UserSearchId(id);
+
+                if (currentUser.CPF != user.CPF )
+                    throw new Exception("Não é permitido a troca do CPF");
+
+                if (currentUser.Email != user.Email )
+                    throw new Exception("Não é permitido a troca do E-mail");
+
+                
+                currentUser.Age = user.Age;
+                currentUser.Name = user.Name;
+                currentUser.Password = _passwordHasher.CreateHash(user.Password);
+
+                return _usersRepository.Update(currentUser);
+    }
+
+    private Users UserSearchId(Guid id)
+    {
+        var currentUser = _usersRepository.GetId(id);
+        
+        if (currentUser == null)
+            throw new Exception("Usuário não encontrado");
+
+        return currentUser;    
+        
     }
 
     private Users UserSearchEmail(string email)
@@ -187,6 +221,47 @@ public class UsersService: IUsersService
 
         if (user.Password != user.PasswordRepeat )
             throw new Exception("As senhas não conferem");
+
+    }
+
+    public bool UploadImg(UploadImgUser uploadImgUser, Guid id)
+    {
+        if (uploadImgUser.ImageUpload.Length > 10000000) 
+            throw new Exception("O tamanho da imagem não pode ultrapassar 10MB");
+
+        string[] contentType = uploadImgUser.ImageUpload.ContentType.Split('/');
+
+        if ((contentType[1].ToUpper() != "PNG") && (contentType[1].ToUpper() != "JPG") && (contentType[1].ToUpper() != "JPEG"))
+            throw new Exception("A imagem deve possuir os formatos .PNG ou .JPG ou .JPEG");
+        
+        
+        Users currentUser = this.UserSearchId(id);
+
+        if (currentUser == null )
+            throw new Exception("Usuário não encontrado na base de dados");
+        
+        using (BinaryReader reader = new BinaryReader(uploadImgUser.ImageUpload.OpenReadStream()))
+        {
+         currentUser.Image = reader.ReadBytes((int)uploadImgUser.ImageUpload.Length);
+        }
+        
+        return _usersRepository.Update(currentUser);
+        
+    }
+     public ProfileUser Get(Guid id)
+    {
+        Users currentUser = this.UserSearchId(id);
+
+        string imgString = null;
+
+        if (currentUser.Image != null)
+        {
+            MemoryStream ms = new MemoryStream(currentUser.Image);
+            imgString = Convert.ToBase64String(currentUser.Image);
+        }
+        
+        return new ProfileUser{Id = currentUser.Id, Name = currentUser.Name, Email= currentUser.Email, Age = currentUser.Age, CPF = currentUser.CPF,
+            Image =  imgString};
 
     }
 

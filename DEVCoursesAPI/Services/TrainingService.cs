@@ -99,5 +99,12 @@ namespace DEVCoursesAPI.Services
 
             return reports;
         }
+
+        public async Task<List<TrainingUser>> GetRegisteredTrainingList(Guid userId)
+        {
+            List<TrainingUser> registeredList = await _repository.GetRegisteredTrainingList(userId);
+
+            return registeredList;
+        }
     }
 }

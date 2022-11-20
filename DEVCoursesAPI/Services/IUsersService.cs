@@ -7,14 +7,15 @@ namespace DEVCoursesAPI.Services;
 public interface IUsersService
 {
     Guid Add(DataUser user);
-    bool Update(Users user);
     JWTResult AuthUser(LoginUser login);
 
     public Guid GetIdToken(string authHeader);
 
     bool Update(DataUser user, Guid id);
+    
+    bool UploadImg(UploadImgUser img, Guid id);
 
     bool ResetPassword(LoginUser login);
-
+    ProfileUser Get(Guid id);
 
 }
