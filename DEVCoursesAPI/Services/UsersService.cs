@@ -211,4 +211,29 @@ public class UsersService: IUsersService
 
     }
 
+        public bool UploadImg(UploadImgUser uploadImgUser, Guid id)
+    {
+        if (uploadImgUser.ImageUpload.Length > 10000000) 
+            throw new Exception("O tamanho da imagem não pode ultrapassar 10MB");
+
+        string[] contentType = uploadImgUser.ImageUpload.ContentType.Split('/');
+
+        if ((contentType[1].ToUpper() != "PNG") && (contentType[1].ToUpper() != "JPG") && (contentType[1].ToUpper() != "JPEG"))
+            throw new Exception("A imagem deve possuir os formatos .PNG ou .JPG ou .JPEG");
+        
+        
+        Users currentUser = this.UserSearchId(id);
+
+        if (currentUser == null )
+            throw new Exception("Usuário não encontrado na base de dados");
+        
+        using (BinaryReader reader = new BinaryReader(uploadImgUser.ImageUpload.OpenReadStream()))
+        {
+         currentUser.Image = reader.ReadBytes((int)uploadImgUser.ImageUpload.Length);
+        }
+        
+        return _usersRepository.Update(currentUser);
+        
+    }
+
 }
