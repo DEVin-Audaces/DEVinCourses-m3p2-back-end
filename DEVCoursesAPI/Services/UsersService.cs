@@ -64,7 +64,20 @@ public class UsersService: IUsersService
 
     public Guid GetIdToken(string authHeader)
     {
-        throw new NotImplementedException();
+        Guid id = new Guid(); 
+                
+        if (authHeader != null && authHeader.StartsWith("bearer", StringComparison.OrdinalIgnoreCase))
+        {
+            var tokenStr = authHeader.Substring("Bearer ".Length).Trim();
+
+            var handler = new JwtSecurityTokenHandler();
+            var token = handler.ReadToken(tokenStr) as JwtSecurityToken;
+            var idToken = token.Claims.First(claim => claim.Type.Contains("jti")).Value;
+
+            id = new Guid(idToken.ToUpper());
+        }
+
+        return id;
     }
 
     public bool Update(DataUser user, Guid id)
@@ -164,11 +177,6 @@ public class UsersService: IUsersService
 
         return _usersRepository.Update(currentUser);
 
-    }
-
-    public ProfileUser Get(Guid id)
-    {
-        throw new NotImplementedException();
     }
 
     private void ValidatePassword(string password)
