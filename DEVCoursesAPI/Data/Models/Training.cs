@@ -17,7 +17,6 @@ namespace DEVCoursesAPI.Data.Models
         public string Instructor { get; set; }
         public Guid Author { get; set; }
         public bool Active { get; set; }
-        [JsonIgnore]
         public List<Module> Modules { get; set; }
 
         public static explicit operator ReadTrainingDto(Training training)
