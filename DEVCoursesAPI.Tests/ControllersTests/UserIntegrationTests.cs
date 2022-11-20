@@ -55,5 +55,45 @@ public class UserIntegrationTests: ConfigurationHostApi
 
     }
 
-    
+    [Fact]
+    public async Task C_Consumir_Api_Create_User_Post_Sucesso()
+    {
+        //Arrange
+        string serv = "/users/CreateUser";
+        Random randNum = new Random();
+        long cpf = randNum.Next();
+        var body = new DataUser { Name = "José Alves", Age = 30, Email = "josealves" + cpf + "@gmail.com", CPF = cpf, Password = "AAAA2222", PasswordRepeat = "AAAA2222" };
+        var jsonContent = JsonConvert.SerializeObject(body);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+
+
+        //Act
+        var returns = await client.PostAsync(serv, contentString);
+
+        //Assert
+        Assert.True(returns.IsSuccessStatusCode);
+
+        jsonContent = await returns.Content.ReadAsStringAsync();
+
+        Assert.NotEqual("", jsonContent);
+    }
+
+    [Fact]
+    public async Task D_Consumir_Api_Create_User_Post_Sem_Sucesso()
+    {
+        //Arrange
+        string serv = "/users/CreateUser";
+        var body = new DataUser { Name = "José Alves", Age = 30, Email = "josealves@gmail.com", CPF = 15226925877, Password = "AAAAA2222", PasswordRepeat = "AAAA2222" };
+        var jsonContent = JsonConvert.SerializeObject(body);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        //Act
+        var returns = await client.PostAsync(serv, contentString);
+
+        //Assert
+        Assert.False(returns.IsSuccessStatusCode);
+
+    }
+
 }
