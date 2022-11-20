@@ -79,6 +79,28 @@ public class UsersController : ControllerBase
 
         }
 
+        /// <summary>
+        /// Atualizar usuário
+        /// </summary>
+        /// <param name="DataUser"></param>
+        /// <returns>Retorna a situação se usuário foi atualizado</returns>
+        /// <response code = "200">Usuário atualizado com sucesso</response>
+        /// <response code = "500">Erro execução</response>
+        [HttpPut("UpdateUser")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> UpdateUser([FromBody] DataUser user)
+        {
+            
+            var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+            Guid id = _usersService.GetIdToken(authHeader);     
+            
+            bool updateUser = _usersService.Update(user, id);
+            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UpdateUser)} - Atualizado: {updateUser}");
+            return StatusCode(200, JsonSerializer.Serialize(updateUser));
+        }
+
 
 
 }
