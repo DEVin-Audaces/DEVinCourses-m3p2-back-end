@@ -18,13 +18,16 @@ namespace DEVCoursesAPI.Controllers
         private readonly IOptions<TrainingsController> _tokenSettings;
         private readonly ITrainingRepository _repository;
         private readonly ITrainingService _service;
+        private readonly ITopicsService _topicService;
         public TrainingsController(
             IOptions<TrainingsController> tokenSettings,
             ILogger<TrainingsController> logger,
             ITrainingRepository repository,
-            ITrainingService service)
+            ITrainingService service,
+            ITopicsService topicService)
         {
             _service = service;
+            _topicService = topicService;
             _logger = logger;
             _repository = repository;
         }
@@ -166,7 +169,7 @@ namespace DEVCoursesAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Put(Guid userId, Guid trainingId)
+        public async Task<ActionResult> CompleteTraining(Guid userId, Guid trainingId)
         {
             try
             {
@@ -181,6 +184,41 @@ namespace DEVCoursesAPI.Controllers
                         "Nem todos os contéudos foram concluídos. " +
                         "Favor concluir todas os tópicos do curso para completar o treinamento."
                         );
+
+                return StatusCode(204);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(Put)}");
+                return StatusCode(500, e.Message);
+            }
+
+        }
+        
+        /// <summary>
+        /// Concluir Tópico
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="trainingId"></param>
+        /// <returns>Retorna tópico completado com sucesso</returns>
+        /// <response code = "204">Concluído com sucesso</response>
+        /// <response code = "404">Conclusão não realizada</response>
+        /// <response code = "500">Erro execução</response>
+        [Route("completeTopic/{userId}/{topicId}")]
+        [HttpPut]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> CompleteTopic(Guid userId, Guid topicId)
+        {
+            try
+            {
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Put)}");
+
+                var topicUser = await _topicService.CompleteTopic(userId, topicId);
+                if (!topicUser) return StatusCode(404, $"Tópico não encontrado");
 
                 return StatusCode(204);
             }

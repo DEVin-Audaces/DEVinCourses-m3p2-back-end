@@ -18,5 +18,24 @@ namespace DEVCoursesAPI.Repositories {
                 return topic.Id;
             }
         }
+        public async Task<TopicUser> GetTopicUser(Guid userId, Guid topicId)
+        {
+            using (var db = _dbFactory.CreateDbContext())
+            {
+                var topicUser = await db.TopicUsers
+                    .Where(t => t.UserId == userId && t.TopicId == topicId).FirstOrDefaultAsync();
+                return topicUser;
+            }
+        }
+
+        public async Task<bool> UpdateTopicUser(TopicUser topicUser)
+        {
+            using (var db = _dbFactory.CreateDbContext())
+            {
+                db.Entry(topicUser).State = EntityState.Modified;
+                await db.SaveChangesAsync();
+                return true;
+            }
+        }
     }
 }
