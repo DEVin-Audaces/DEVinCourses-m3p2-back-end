@@ -232,6 +232,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "400">Inserção não realizada, pois treinamento inativo</response>
         /// <response code = "500">Ocorreu erro durante a execução</response> 
         [HttpPost("registration")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
