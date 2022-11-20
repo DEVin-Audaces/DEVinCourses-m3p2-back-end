@@ -125,27 +125,5 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             // Assert
             Assert.Equal(noActiveStudent, result);
         }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public async void CreateTrainingRegistrationAsync_ShouldOnlyCreateWhenTrainingIsActive(bool trainingIsActive)
-        {
-            // Arrange
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
-
-            Guid trainingId = Guid.NewGuid();
-            Training training = new Training() { Id = trainingId, Active = trainingIsActive };
-            TrainingRegistrationDto trainingRegistrationDto = new() { TrainingId = trainingId };
-
-            _trainingsRepository.Setup(repo => repo.CreateTrainingRegistration(trainingRegistrationDto))
-                .ReturnsAsync(training.Active);
-
-            // Act
-            bool result = await service.CreateTrainingRegistrationAsync(trainingRegistrationDto);
-
-            // Assert
-            Assert.Equal(trainingIsActive, result);
-        }
     }
 }
