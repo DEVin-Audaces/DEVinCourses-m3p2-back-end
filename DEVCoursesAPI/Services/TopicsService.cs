@@ -1,7 +1,6 @@
 ﻿using DEVCoursesAPI.Data.DTOs.TopicDTO;
 using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace DEVCoursesAPI.Services
 {

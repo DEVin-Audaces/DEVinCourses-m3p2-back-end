@@ -1,7 +1,6 @@
 using DEVCoursesAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using Microsoft.AspNetCore.Authorization;
@@ -159,7 +158,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "200">Retorna Lista de IDs de Treinamentos</response>
         /// <response code = "500">Erro execução</response>
         [HttpGet("list/registered/{userId}")]
-        // [Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetRegisteredTrainings(Guid userId)
@@ -204,7 +203,7 @@ namespace DEVCoursesAPI.Controllers
         {
             try
             {
-                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Put)}");
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(CompleteTraining)}");
 
                 var trainingUser = await _repository.GetTrainingUser(userId, trainingId);
                 if (trainingUser == null) return StatusCode(404, $"Usuário {userId} não está matriculado no curso {trainingId}");
@@ -220,7 +219,7 @@ namespace DEVCoursesAPI.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(Put)}");
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(CompleteTraining)}");
                 return StatusCode(500, e.Message);
             }
 
@@ -246,7 +245,7 @@ namespace DEVCoursesAPI.Controllers
         {
             try
             {
-                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(Put)}");
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(CompleteTopic)}");
 
                 var topicUser = await _topicService.CompleteTopic(userId, topicId);
                 if (!topicUser) return StatusCode(404, $"Tópico não encontrado");
@@ -255,7 +254,7 @@ namespace DEVCoursesAPI.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(Put)}");
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)} - Method:{nameof(CompleteTopic)}");
                 return StatusCode(500, e.Message);
             }
 

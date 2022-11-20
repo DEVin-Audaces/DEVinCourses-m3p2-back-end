@@ -296,8 +296,6 @@ namespace DEVCoursesAPI.Repositories
                 return reports;
             }
         }
-
-       
     }
 }
 
