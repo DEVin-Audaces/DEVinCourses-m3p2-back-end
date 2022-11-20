@@ -16,6 +16,6 @@ public interface IUsersService
     bool UploadImg(UploadImgUser img, Guid id);
 
     bool ResetPassword(LoginUser login);
-
+    ProfileUser Get(Guid id);
 
 }

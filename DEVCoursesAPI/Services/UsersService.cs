@@ -166,6 +166,11 @@ public class UsersService: IUsersService
 
     }
 
+    public ProfileUser Get(Guid id)
+    {
+        throw new NotImplementedException();
+    }
+
     private void ValidatePassword(string password)
     {
         Regex regex = new Regex(@"(^(?=.*\d)(?=.*[a-zA-Z])(?:([0-9a-zA-Z])(?!\1)){8,}$)", RegexOptions.IgnorePatternWhitespace);
