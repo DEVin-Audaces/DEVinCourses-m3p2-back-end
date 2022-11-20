@@ -11,6 +11,7 @@ namespace DEVCoursesAPI.Repositories
         Task<List<TopicUser>> GetFilteredTopicUsers(List<Topic> topics, Guid userId);
         Task<List<Topic>> GetTopics(Guid trainingId);
         Task<TrainingUser> GetTrainingUser(Guid userId, Guid trainingId);
+        Task<List<TrainingUser>> GetRegisteredTrainingList(Guid userId);
         Task UpdateTrainingUser(TrainingUser trainingUser);
         Task<Training?> GetByIdAsync(Guid id);
         Task<Guid> CreateTraining(Training training);
