@@ -240,5 +240,21 @@ public class UsersService: IUsersService
         return _usersRepository.Update(currentUser);
         
     }
+     public ProfileUser Get(Guid id)
+    {
+        Users currentUser = this.UserSearchId(id);
+
+        string imgString = null;
+
+        if (currentUser.Image != null)
+        {
+            MemoryStream ms = new MemoryStream(currentUser.Image);
+            imgString = Convert.ToBase64String(currentUser.Image);
+        }
+        
+        return new ProfileUser{Id = currentUser.Id, Name = currentUser.Name, Email= currentUser.Email, Age = currentUser.Age, CPF = currentUser.CPF,
+            Image =  imgString};
+
+    }
 
 }

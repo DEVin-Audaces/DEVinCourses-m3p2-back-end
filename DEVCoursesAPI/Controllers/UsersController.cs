@@ -124,7 +124,25 @@ public class UsersController : ControllerBase
         bool uploadImg = _usersService.UploadImg(model, id);
         _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UploadImgUser)} - Atualizou: {uploadImg}");
         return StatusCode(200, JsonSerializer.Serialize(uploadImg));
-
     }
 
+    // <summary>
+    /// Retorna informações do usuário 
+    /// </summary>
+    /// <returns>Retorna as informações do usuário</returns>
+    /// <response code="200">Retorna usuário</response>
+    /// <response code="500">Ocorreu erro durante a execução</response>
+    [HttpGet("UserProfile")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UserProfile()
+    {
+        var authHeader = HttpContext.Request.Headers["authorization"].ToString();
+        Guid id = _usersService.GetIdToken(authHeader);
+ 
+        ProfileUser user = _usersService.Get(id);
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UserProfile)} - user: {user}");
+        return StatusCode(200, user); 
+    }
 }
