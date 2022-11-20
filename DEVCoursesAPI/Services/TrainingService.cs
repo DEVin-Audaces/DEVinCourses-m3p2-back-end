@@ -95,7 +95,7 @@ namespace DEVCoursesAPI.Services
         public async Task<List<TrainingReport>> GetReports()
         {
             List<TrainingReport> reports = await _repository.GetReports();
-            reports.OrderBy(report => report.TotalFinishedStudents).ToList();
+            reports = reports.OrderByDescending(report => report.TotalFinishedStudents).ToList();
 
             return reports;
         }
