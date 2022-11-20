@@ -30,7 +30,7 @@ namespace DEVCoursesAPI.Repositories
                 return await context.Trainings
                     .Include(training => training.Modules)
                     .ThenInclude(module => module.Topics)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(training => training.Id == id);
             }
         }
 
