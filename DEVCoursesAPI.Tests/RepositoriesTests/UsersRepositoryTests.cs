@@ -122,6 +122,80 @@ public class UsersRepositoryTests
        
         
     }
+    
+    [Fact]
+    public void  Buscar_Users_No_Repository_Por_CPF_Encontrando()
+    {
+        //Arrange
+        double cpf = 256936580001;
+        UsersRepository usersRepository = new UsersRepository(new TestCoursesDbContextFactory());
+        Users usersModel = GerarUsers();
+        usersRepository.Add(usersModel);
+
+        //Act
+        Users users = usersRepository.GetCPF(cpf);
+        
+        //Assert
+        Assert.Equal(cpf, users.CPF);
+        
+    }
+
+    [Theory]
+    [InlineData(256936580002)]
+    public void  Buscar_Users_No_Repository_Por_CPF_Nao_Encontrando(double cpf)
+    {
+        //Arrange
+        UsersRepository usersRepository = new UsersRepository(new TestCoursesDbContextFactory());
+
+        //Act
+        Func<object>  BuscaAction = () =>
+        {
+            Users usersModel = usersRepository.GetCPF(cpf);
+            return usersModel.CPF;
+        };
+
+        //Assert
+        Assert.Throws<NullReferenceException>(BuscaAction);
+       
+        
+    }
+
+    [Fact]
+    public void  Buscar_Users_No_Repository_Por_ID_Encontrando()
+    {
+        //Arrange
+        UsersRepository usersRepository = new UsersRepository(new TestCoursesDbContextFactory());
+        Users usersModel = GerarUsers();
+        Guid id = usersRepository.Add(usersModel);
+
+        //Act
+        Users users = usersRepository.GetId(id);
+        
+        //Assert
+        Assert.Equal(id, users.Id);
+        
+    }
+
+    [Theory]
+    [InlineData("8EE03886-4B79-4D03-2F8F-08DAC3618BAE")]
+    public void  Buscar_Users_No_Repository_Por_ID_Nao_Encontrando(Guid id)
+    {
+        //Arrange
+        UsersRepository usersRepository = new UsersRepository(new TestCoursesDbContextFactory());
+
+        //Act
+        Func<object>  BuscaAction = () =>
+        {
+            Users usersModel = usersRepository.GetId(id);
+            return usersModel.Id;
+        };
+
+        //Assert
+        Assert.Throws<NullReferenceException>(BuscaAction);
+       
+        
+    }
+
 
  
 }
