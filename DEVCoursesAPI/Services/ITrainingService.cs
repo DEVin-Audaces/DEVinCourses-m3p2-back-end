@@ -16,5 +16,6 @@ namespace DEVCoursesAPI.Services
         Task<bool> SuspendAsync(Guid id);
         Task<RegisteredUsers> GetUsersRegisteredInTraining(Guid trainingId);
         Task<List<TrainingReport>> GetReports();
+        Task<List<TrainingUser>> GetRegisteredTrainingList(Guid userId);
     }
 }

@@ -127,13 +127,44 @@ namespace DEVCoursesAPI.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-
         public async Task<ActionResult> GetTrainingsByUserId(Guid userId)
         {
             try
             {
                 _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(GetTrainingsByUserId)}");
                 var trainings = _service.UserLoginTrainingsList(userId);
+
+                if (trainings == null)
+                    return NotFound();
+
+                return Ok(trainings);
+
+            }
+
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Controller:{nameof(TrainingsController)}-Method:{nameof(GetTrainingsByUserId)}");
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Lista de todos IDs de treinamentos matriculado
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>Retorna os treinamentos matriculados de acordo com o Id do usuário inserido</returns>
+        /// <response code = "200">Retorna Lista de IDs de Treinamentos</response>
+        /// <response code = "500">Erro execução</response>
+        [HttpGet("list/registered/{userId}")]
+        // [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult> GetRegisteredTrainings(Guid userId)
+        {
+            try
+            {
+                _logger.LogInformation($"Class:{nameof(TrainingsController)}-Method:{nameof(GetRegisteredTrainings)}");
+                var trainings = await _service.GetRegisteredTrainingList(userId);
 
                 if (trainings == null)
                     return NotFound();
