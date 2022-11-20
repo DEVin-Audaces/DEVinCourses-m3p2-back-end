@@ -164,5 +164,62 @@ public class UserIntegrationTests: ConfigurationHostApi
         //Assert
         Assert.False(returns.IsSuccessStatusCode);
     }
+    
+    [Fact]
+    public async Task I_Consumir_Api_User_Profile_Get_Sucesso()
+    {
+        //Arrange
+        string serv = "/users/LoginUser";
+        serv = "/users/LoginUser";
+        var bodyLogin = new LoginUser{Email = "lucaspereira@gmail.com", Password = "AAAA2223"};
+        var jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
+        var returns = await client.PostAsync(serv, contentString);
+
+        jsonContent = await returns.Content.ReadAsStringAsync();
+        var objetoResponse =  JsonConvert.DeserializeObject<JWTResult>(jsonContent);
+
+        var accessToken = objetoResponse.AccessToken;
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        
+        serv = "/users/UserProfile";
+
+        //Act
+        returns = await client.GetAsync(serv);
+
+        //Assert
+        Assert.True(returns.IsSuccessStatusCode);
+
+        jsonContent = await returns.Content.ReadAsStringAsync();
+
+        Assert.NotEqual("", jsonContent);
+    }
+
+    [Fact]
+    public async Task J_Consumir_Api_User_Profile_Get_Sem_Sucesso()
+    {
+        //Arrange
+        string serv = "/users/LoginUser";
+        serv = "/users/LoginUser";
+        var bodyLogin = new LoginUser{Email = "lucaspereiral@gmail.com", Password = "AAAA2223"};
+        var jsonContent = JsonConvert.SerializeObject(bodyLogin);
+        var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+        var returns = await client.PostAsync(serv, contentString);
+
+        jsonContent = await returns.Content.ReadAsStringAsync();
+        var objetoResponse =  JsonConvert.DeserializeObject<JWTResult>(jsonContent);
+
+        var accessToken = objetoResponse.AccessToken;
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        
+        serv = "/users/UserProfile";
+
+        //Act
+        returns = await client.GetAsync(serv);
+
+        //Assert
+        Assert.False(returns.IsSuccessStatusCode);
+    }
 }
