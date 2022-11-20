@@ -211,7 +211,7 @@ public class UsersService: IUsersService
 
     }
 
-        public bool UploadImg(UploadImgUser uploadImgUser, Guid id)
+    public bool UploadImg(UploadImgUser uploadImgUser, Guid id)
     {
         if (uploadImgUser.ImageUpload.Length > 10000000) 
             throw new Exception("O tamanho da imagem não pode ultrapassar 10MB");
