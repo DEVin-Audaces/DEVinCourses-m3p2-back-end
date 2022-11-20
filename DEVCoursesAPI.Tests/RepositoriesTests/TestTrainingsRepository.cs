@@ -1,4 +1,6 @@
-﻿using DEVCoursesAPI.Data.Models;
+﻿using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
+using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
 namespace DEVCoursesAPI.Tests.RepositoriesTests
@@ -108,6 +110,46 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
 
             // Assert
             Assert.False(result);
+        }
+
+        [Fact]
+        public async void GetUsersRegisteredInTraining_ShouldReturnRegisteredUsers()
+        {
+            //Arrange
+            TestCoursesDbContextFactory dbFactory = new ();
+            UsersRepository usersRepository = new(dbFactory);
+            TrainingRepository repository = new(dbFactory);
+
+            Users user = new() { Email = "", Name = "", Password = ""};
+            Guid userId = usersRepository.Add(user);
+
+            training.Active = true;
+            Guid trainingId = await repository.CreateTraining(training);          
+
+            TrainingRegistrationDto registrationDto = new() { TrainingId = trainingId, UserId = userId, TopicIds = new List<Guid>() };
+            await repository.CreateTrainingRegistration(registrationDto);
+
+            // Act
+            RegisteredUsers registeredUsers = await repository.GetUsersRegisteredInTraining(trainingId);
+            int result = registeredUsers.ActiveUsers.Count;
+
+            // Assert
+            Assert.Equal(1, result);
+        }
+
+        [Fact]
+        public async void GetReports_ShouldReturnListOfReports()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            await repository.CreateTraining(training);
+
+            // Act
+            List<TrainingReport> reports = await repository.GetReports();
+
+            // Assert
+            Assert.Single(reports);
         }
     }
 }
