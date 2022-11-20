@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace DEVCoursesAPI.Tests.ControllersTests;
 
-[TestCaseOrderer("DEVCoursesAPI.Tests.Order.AlphabeticalOrderer", "DEVCoursesAPI.Tests")]
+[TestCaseOrderer("DEVCoursesAPI.Tests.AlphabeticalOrderer", "DEVCoursesAPI.Tests")]
 
 public class UserIntegrationTests: ConfigurationHostApi
 {
