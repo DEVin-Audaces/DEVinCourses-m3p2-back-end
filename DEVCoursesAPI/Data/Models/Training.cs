@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.DTOs.ModuleDTO;
-using System.Text.Json.Serialization;
 
 namespace DEVCoursesAPI.Data.Models
 {
