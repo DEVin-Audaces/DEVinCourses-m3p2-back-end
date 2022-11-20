@@ -8,6 +8,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
     public class TestTrainingsRepository
     {
         private readonly Training training;
+        private readonly Users user;
 
         public TestTrainingsRepository()
         {
@@ -20,7 +21,17 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
                 Author = Guid.NewGuid(),
                 Active = false
             };
+
+            user = new Users()
+            {
+                Name = "teste", 
+                Age = 18, 
+                Email = "asdfa@gmail.com",
+                CPF = 01110222555,
+                Password = "7894sd5ff4",
+            };
         }
+
         [Fact]
         public async void CreateTraining_ShouldReturnGuidWhenCreatingTraining()
         {
@@ -190,6 +201,61 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
 
             // Assert
             Assert.Single(reports);
+        }
+
+        [Fact]
+        public async void GetTopics_ShouldReturnTopicsList()
+        {
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+
+            var listTopics = await repository.GetTopics(trainingId);
+
+            Assert.IsType<List<Topic>>(listTopics);
+        }
+
+        [Fact]
+        public async void GetFilteredTopicUsers_ShouldReturnFilteredTopicUserList()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            UsersRepository userRepository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+            Guid userId = userRepository.Add(user);
+
+            // Act
+            var topics = await repository.GetTopics(trainingId);
+            var topicsUser = await repository.GetFilteredTopicUsers(topics, userId);
+            var topicsEqualTopicsUser = topics.Join(topicsUser,
+                    topic => topic.Id,
+                    topicUser => topicUser.TopicId,
+                    (_, topicUser) => topicUser)
+                .ToList();
+
+            // Assert
+            Assert.IsType<List<TopicUser>>(topicsUser);
+            Assert.Equal(topics.Count, topicsUser.Count);
+            Assert.Equal(topics.Count, topicsEqualTopicsUser.Count);
+        }
+
+        [Fact]
+        public async void GetFilteredTopicUsers_ShouldNotReturnFilteredTopicUserList()
+        {
+            // Arrange
+            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            UsersRepository userRepository = new(new TestCoursesDbContextFactory());
+
+            Guid trainingId = await repository.CreateTraining(training);
+            Guid userId = Guid.NewGuid();
+
+            // Act
+            var topics = await repository.GetTopics(trainingId);
+            var topicsUser = await repository.GetFilteredTopicUsers(topics, userId);
+
+            // Assert
+            Assert.Empty(topicsUser);
         }
     }
 }
