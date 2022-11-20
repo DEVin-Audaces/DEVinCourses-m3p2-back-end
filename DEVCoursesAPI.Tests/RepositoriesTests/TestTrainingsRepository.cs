@@ -1,4 +1,5 @@
-﻿using DEVCoursesAPI.Data.DTOs.TrainingDTO;
+﻿using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Repositories;
 
