@@ -23,27 +23,20 @@ public class UsersController : ControllerBase
         /// <summary>
         /// Inserir usuário
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="DataUser"></param>
         /// <returns>Retorna Id do usuário inserido</returns>
         /// <response code = "201">Usuário inserido com sucesso</response>
         /// <response code = "400">Inserção não realizada</response>
         /// <response code = "500">Erro execução</response>
-        [HttpPost]
+        [HttpPost("CreateUser")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult> Post([FromBody] DataUser user)
+        public async Task<ActionResult> CreateUser([FromBody] DataUser user)
         {
-            try
-            {
-                return StatusCode(201); ;
-
-            }
-            catch(Exception e)
-            {
-                _logger.LogError(e, $"Controller:{nameof(UsersController)} - Method:{nameof(Post)}");
-                return StatusCode(500, e.Message);
-            }
+            Guid idUser = _usersService.Add(user);
+            _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(CreateUser)} - Id: {idUser}");
+            return StatusCode(201, $"{idUser}"); ;
 
         }
         
