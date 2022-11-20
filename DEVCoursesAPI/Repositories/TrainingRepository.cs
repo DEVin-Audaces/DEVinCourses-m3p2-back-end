@@ -34,6 +34,7 @@ namespace DEVCoursesAPI.Repositories
             }
         }
 
+
         public async Task<bool> DeleteRegistration(Guid userID, Guid trainingID, Guid[] topicsID)
         {
             using (var context = _dbContextFactory.CreateDbContext())
@@ -98,6 +99,17 @@ namespace DEVCoursesAPI.Repositories
                 var trainingUser = await context.TrainingUsers
                 .Where(training => training.UserId == userId && training.TrainingId == trainingId)
                 .FirstOrDefaultAsync();
+                return trainingUser;
+            }
+        }
+
+        public async Task<List<TrainingUser>> GetRegisteredTrainingList(Guid userId)
+        {
+            using (var context = _dbContextFactory.CreateDbContext())
+            {
+                var trainingUser = await context.TrainingUsers
+                .Where(training => training.UserId == userId)
+                .ToListAsync();
                 return trainingUser;
             }
         }
