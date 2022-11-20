@@ -102,5 +102,29 @@ public class UsersController : ControllerBase
         }
 
 
+/// <summary>
+    /// Upload de foto
+    /// </summary>
+    /// <param name="UploadIImgUser"></param>
+    /// <returns>Retorna se foi efetuado com sucesso o upload</returns>
+    /// <response code = "200">foto atualizada com sucesso</response>
+    /// <response code = "500">Erro execução</response>
+    [HttpPut("UploadImgUser")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult> UploadImgUser([FromForm] UploadImgUser model)
+    {
+        var authHeader = HttpContext.Request.Headers["Authorization"].ToString();
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UploadImgUser)} - authHeader: {authHeader}");
+
+        Guid id = _usersService.GetIdToken(authHeader);     
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UploadImgUser)} - id: {id}");
+
+        bool uploadImg = _usersService.UploadImg(model, id);
+        _logger.LogInformation($"Controller: {nameof(UsersController)} - Método: {nameof(UploadImgUser)} - Atualizou: {uploadImg}");
+        return StatusCode(200, JsonSerializer.Serialize(uploadImg));
+
+    }
 
 }
