@@ -1,8 +1,8 @@
+using System.Text.Json;
 using DEVCoursesAPI.Data.DTOs;
-using DEVCoursesAPI.Data.Models;
 using DEVCoursesAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace DEVCoursesAPI.Controllers;
 
