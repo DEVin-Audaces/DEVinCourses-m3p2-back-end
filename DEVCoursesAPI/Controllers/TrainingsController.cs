@@ -37,7 +37,7 @@ namespace DEVCoursesAPI.Controllers
         /// <response code = "404">Nenhum treinamento encontrado</response>
         /// <response code = "500">Erro durante a execução</response>
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -300,6 +300,35 @@ namespace DEVCoursesAPI.Controllers
                 List<TrainingReport> result = await _service.GetReports();
 
                 return result.Any() ? Ok(result) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Suspende um treinamento caso não haja usuários ativos
+        /// </summary>
+        /// <param name="nameof(id)">Id do treinamento</param>
+        /// <response code = "204">Treinamento suspenso</response>
+        /// <response code = "400">Treinamento não pôde ser suspenso</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpPut("suspend/{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SuspendTraining(Guid id)
+        {
+            try
+            {
+                bool result = await _service.SuspendAsync(id);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(SuspendTraining)}");
+
+                return result == true ? NoContent() : BadRequest();
             }
             catch (Exception ex)
             {
