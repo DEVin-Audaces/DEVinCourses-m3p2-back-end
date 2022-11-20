@@ -6,6 +6,7 @@ using DEVCoursesAPI.Repositories;
 using DEVCoursesAPI.Data.DTOs.TrainingDTO;
 using Microsoft.AspNetCore.Authorization;
 using DEVCoursesAPI.Data.DTOs;
+using DEVCoursesAPI.Data.Models;
 
 namespace DEVCoursesAPI.Controllers
 {
@@ -26,6 +27,35 @@ namespace DEVCoursesAPI.Controllers
             _service = service;
             _logger = logger;
             _repository = repository;
+        }
+
+        /// <summary>
+        /// Busca todos os treinamentos
+        /// </summary>
+        /// <returns>Retorna lista de treinamentos</returns>
+        /// <response code = "200">Retorna lista de treinamentos</response>
+        /// <response code = "404">Nenhum treinamento encontrado</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpGet]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Training>>> Get()
+        {
+            try
+            {
+                List<Training> trainings = await _repository.GetAll();
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(Get)}");
+
+                return trainings.Any() ? Ok(trainings): NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -50,6 +80,34 @@ namespace DEVCoursesAPI.Controllers
                 _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(GetTrainingById)}");
 
                 return training == null ? NotFound() : Ok(training);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Cadastra um novo treinamento
+        /// </summary>
+        /// <param name="nameof(trainingDto)">Treinamento</param>
+        /// <returns>Retorna o Id do treinamento cadastrado</returns>
+        /// <response code = "201">Retorna o Id do treinamento cadastrado</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateTraining([FromBody] CreateTrainingDto trainingDto)
+        {
+            try
+            {
+                Guid trainingId = await _service.CreateTrainingAsync(trainingDto);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(CreateTraining)}");
+
+                return CreatedAtAction(nameof(Get), new { Id = trainingId });
             }
             catch (Exception ex)
             {
@@ -242,6 +300,35 @@ namespace DEVCoursesAPI.Controllers
                 List<TrainingReport> result = await _service.GetReports();
 
                 return result.Any() ? Ok(result) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// Suspende um treinamento caso não haja usuários ativos
+        /// </summary>
+        /// <param name="nameof(id)">Id do treinamento</param>
+        /// <response code = "204">Treinamento suspenso</response>
+        /// <response code = "400">Treinamento não pôde ser suspenso</response>
+        /// <response code = "500">Erro durante a execução</response>
+        [HttpPut("suspend/{id}")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> SuspendTraining(Guid id)
+        {
+            try
+            {
+                bool result = await _service.SuspendAsync(id);
+
+                _logger.LogInformation($"Controller: {nameof(TrainingsController)} - Method: {nameof(SuspendTraining)}");
+
+                return result == true ? NoContent() : BadRequest();
             }
             catch (Exception ex)
             {
