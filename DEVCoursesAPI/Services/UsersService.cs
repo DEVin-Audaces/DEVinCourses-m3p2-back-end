@@ -28,12 +28,24 @@ public class UsersService: IUsersService
 
     public Guid Add(DataUser user)
     {
-        throw new NotImplementedException();
-    }
+        validateUser(user);
+        
+        Users currentUser = _usersRepository.GetEmail(user.Email);
+        
+        if (currentUser != null )
+            throw new Exception("E-mail já está cadastrado na base de dados");
+        
+        currentUser = _usersRepository.GetCPF(user.CPF);
+        
+        if (currentUser != null )
+            throw new Exception("CPF já está cadastrado na base de dados");
 
-    public bool Update(Users user)
-    {
-        throw new NotImplementedException();
+       
+        var newUser = new Users { Age = user.Age, Email = user.Email, Name = user.Name, 
+            Password = _passwordHasher.CreateHash(user.Password), CPF = user.CPF, Image = null};
+        _usersRepository.Add(newUser);
+
+        return newUser.Id;
     }
 
     public JWTResult AuthUser(LoginUser login )
@@ -57,7 +69,33 @@ public class UsersService: IUsersService
 
     public bool Update(DataUser user, Guid id)
     {
-        throw new NotImplementedException();
+        validateUser(user);
+
+                Users currentUser = this.UserSearchId(id);
+
+                if (currentUser.CPF != user.CPF )
+                    throw new Exception("Não é permitido a troca do CPF");
+
+                if (currentUser.Email != user.Email )
+                    throw new Exception("Não é permitido a troca do E-mail");
+
+                
+                currentUser.Age = user.Age;
+                currentUser.Name = user.Name;
+                currentUser.Password = _passwordHasher.CreateHash(user.Password);
+
+                return _usersRepository.Update(currentUser);
+    }
+
+    private Users UserSearchId(Guid id)
+    {
+        var currentUser = _usersRepository.GetId(id);
+        
+        if (currentUser == null)
+            throw new Exception("Usuário não encontrado");
+
+        return currentUser;    
+        
     }
 
     private Users UserSearchEmail(string email)
@@ -136,6 +174,40 @@ public class UsersService: IUsersService
 
         if (!m.Success)
             throw new Exception("Senha deve ter pelo menos 8 dígitos alfanuméricos (letras e números)");
+
+    }
+
+    private void validateUser(DataUser user)
+
+    {
+        if (user.CPF == 0)
+            throw new Exception("CPF é obrigatório");
+        
+        if (user.Name.Length < 3)
+            throw new Exception("Nome deve possuir no mínimo 3 caracteres e apenas caracteres alfabético");
+
+        Regex regex = new Regex(@"^[a-záéíóúõãçàâêô ]+$", RegexOptions.IgnoreCase);
+
+        Match m = regex.Match(user.Name);
+        
+        if (!m.Success)
+            throw new Exception("Nome deve possuir no mínimo 3 caracteres e apenas caracteres alfabético");
+
+        this.ValidatePassword(user.Password);
+
+        
+        regex = new Regex(@"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase);
+
+        m = regex.Match(user.Email);
+        
+        if (!m.Success)
+            throw new Exception("E-mail possui formato inválido");
+        
+        if (user.Age < 18 )
+            throw new Exception("Usuário deverá possuir idade maior ou igual a 18 anos");
+
+        if (user.Password != user.PasswordRepeat )
+            throw new Exception("As senhas não conferem");
 
     }
 

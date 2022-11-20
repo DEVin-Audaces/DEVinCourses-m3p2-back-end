@@ -1,7 +1,7 @@
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace DEVCoursesAPI.Tests.ControllersTests;
+namespace DEVCoursesAPI.Tests;
 
 public class AlphabeticalOrder: ITestCaseOrderer
 {

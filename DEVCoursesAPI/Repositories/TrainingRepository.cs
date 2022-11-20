@@ -30,7 +30,7 @@ namespace DEVCoursesAPI.Repositories
                 return await context.Trainings
                     .Include(training => training.Modules)
                     .ThenInclude(module => module.Topics)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(training => training.Id == id);
             }
         }
 
@@ -174,7 +174,7 @@ namespace DEVCoursesAPI.Repositories
              {
                 Training? training = await db.Trainings.FirstOrDefaultAsync(training => training.Id == id);
 
-                if (training == null | training.Active == false)
+                if (training == null || training.Active == false)
                     return false;
 
                 training.Active = false;
