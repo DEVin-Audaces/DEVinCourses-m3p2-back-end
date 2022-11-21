@@ -11,7 +11,7 @@ public class TestCoursesDbContextFactory: IDbContextFactory<DEVCoursesContext>
     public TestCoursesDbContextFactory(string databaseName = "InMemoryTest")
     {
         _options = new DbContextOptionsBuilder<DEVCoursesContext>()
-            .UseInMemoryDatabase(databaseName, new InMemoryDatabaseRoot())
+            .UseInMemoryDatabase(databaseName)
             .Options;
     }
 

@@ -16,11 +16,14 @@ namespace DEVCoursesAPI.Tests.ServicesTests
     {
         private readonly Mock<ITrainingRepository> _trainingsRepository;
         private readonly Mock<IModulesService> _modulesService;
+        private readonly TrainingService service;
 
         public TestTrainingsService()
         {
             _trainingsRepository = new Mock<ITrainingRepository>();
             _modulesService = new Mock<IModulesService>();
+
+            service = new TrainingService(_trainingsRepository.Object, _modulesService.Object);
         }
 
         [Fact]
@@ -31,8 +34,6 @@ namespace DEVCoursesAPI.Tests.ServicesTests
 
             _trainingsRepository.Setup(repo => repo.CreateTraining(It.IsAny<Training>()))
                                 .ReturnsAsync(trainingId);
-
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
 
             CreateTrainingDto trainingDto = new CreateTrainingDto();
             trainingDto.Modules = new List<CreateModuleDto>();
@@ -52,8 +53,6 @@ namespace DEVCoursesAPI.Tests.ServicesTests
 
             _trainingsRepository.Setup(repo => repo.GetAll())
                                 .ReturnsAsync(list);
-
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
 
             // Act
             List<Training> result = await service.GetAll();
@@ -80,8 +79,6 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             _trainingsRepository.Setup(repo => repo.GetByIdAsync(trainingId))
                 .ReturnsAsync(training);
 
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
-
             // Act
             ReadTrainingDto? trainingDto = await service.GetByIdAsync(trainingId);
 
@@ -92,8 +89,7 @@ namespace DEVCoursesAPI.Tests.ServicesTests
         [Fact]
         public async void GetByIdAsync_ShouldReturnNullWhenInvalid()
         {
-            // Arrange
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
+            // Arrang
             Guid invalidId = Guid.NewGuid();
 
             // Act
@@ -116,8 +112,6 @@ namespace DEVCoursesAPI.Tests.ServicesTests
 
             _trainingsRepository.Setup(repo => repo.SuspendAsync(trainingId))
                 .ReturnsAsync(true);
-
-            TrainingService service = new(_trainingsRepository.Object, _modulesService.Object);
 
             // Act
             bool result = await service.SuspendAsync(trainingId);

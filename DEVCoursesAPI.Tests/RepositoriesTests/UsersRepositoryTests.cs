@@ -19,6 +19,7 @@ public class UsersRepositoryTests
         //Arrange
         UsersRepository usersRepository = new UsersRepository(new TestCoursesDbContextFactory());
         Users usersModel = GerarUsers();
+        usersModel.Email = "rodrigoraiche@gmail.com";
         
         //Act
         Guid idInseridoDoUsers = usersRepository.Add(usersModel);
