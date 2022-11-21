@@ -15,19 +15,23 @@ public class UsersRepository : IUsersRepository<Users>
     }
 
 
-    public Guid Add(Users model)
+    public Guid Add(Users user)
     {
-        throw new NotImplementedException();
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            context.Add(user);
+            context.SaveChanges();
+            return user.Id;
+        }
     }
 
     public bool Update(Users model)
     {
-        throw new NotImplementedException();
-    }
-
-    public IList<Users> GetAll()
-    {
-        throw new NotImplementedException();
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            context.Update(model);
+            return context.SaveChanges() > 0;
+        }
     }
 
     public Users GetEmail(string email)
@@ -35,6 +39,21 @@ public class UsersRepository : IUsersRepository<Users>
         using (var context = _dbContextFactory.CreateDbContext())
         {
             return  context.Users.Where(q => q.Email.ToLower() == email.ToLower()).FirstOrDefault(); 
+        }
+    }
+
+    public Users GetId(Guid id)
+    {
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            return  context.Users.Where(q => q.Id == id).FirstOrDefault();
+        }    }
+
+    public Users GetCPF(Double cpf)
+    {
+        using (var context = _dbContextFactory.CreateDbContext())
+        {
+            return  context.Users.Where(q => q.CPF == cpf).FirstOrDefault();
         }
     }
 }

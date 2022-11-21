@@ -58,8 +58,13 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
 builder.Services
     .AddScoped<IUsersService, UsersService>()
     .AddScoped<IPasswordHasher, PasswordHasher>()
-    .AddScoped<IUsersRepository<Users>, UsersRepository>();
-
+    .AddScoped<IUsersRepository<Users>, UsersRepository>()
+    .AddScoped<IModulesRepository, ModulesRepository>()
+    .AddScoped<IModulesService, ModulesService>()
+    .AddScoped<ITrainingRepository, TrainingRepository>()
+    .AddScoped<ITrainingService, TrainingService>()
+    .AddScoped<ITopicsRepository, TopicsRepository>()
+    .AddScoped<ITopicsService, TopicsService>();
 
 builder.Services
     .AddSwaggerGen(swagger =>
