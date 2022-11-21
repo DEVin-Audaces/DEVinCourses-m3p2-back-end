@@ -7,11 +7,15 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
 {
     public class TestTrainingsRepository
     {
+        private readonly TrainingRepository repository;
         private readonly Training training;
         private readonly Users user;
 
         public TestTrainingsRepository()
         {
+            TestCoursesDbContextFactory dbFactory = new();
+            repository = new TrainingRepository(dbFactory);
+
             training = new Training()
             {
                 Name = "Name",
@@ -36,7 +40,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void CreateTraining_ShouldReturnGuidWhenCreatingTraining()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
 
             // Act
             Guid result = await repository.CreateTraining(training);
@@ -49,22 +53,24 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void GetAll_ShouldReturnListOfTrainings()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            List<Training> initial = await repository.GetAll();
+            int initialCount = initial.Count();
 
             await repository.CreateTraining(training);
 
             // Act
             List<Training> result = await repository.GetAll();
+            int resultCount = result.Count();
 
             // Assert
-            Assert.Single(result);
+            Assert.NotEqual(initialCount, resultCount);
         }
 
         [Fact]
         public async void GetByIdAsync_ShouldReturnTrainingWhenValid()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
 
             Guid trainingId = await repository.CreateTraining(training);
 
@@ -80,8 +86,6 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void GetByIdAsync_ShouldReturnNullWhenInvalid()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
-
             Guid invalidId = Guid.NewGuid();
 
             // Act
@@ -95,8 +99,6 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void SuspendAsync_ShouldSuspendActiveTraining()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
-
             training.Active = true;
             Guid trainingId = await repository.CreateTraining(training);
 
@@ -111,7 +113,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void SuspendAsync_ShouldNotSuspendInactiveTraining()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
 
             training.Active = false;
             Guid trainingId = await repository.CreateTraining(training);
@@ -127,7 +129,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void CreateTrainingRegistration_ShouldReturnTrueWhenCreatingTrainingRegistration()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
             training.Active = true;
             Guid trainingId = await repository.CreateTraining(training);
             TrainingRegistrationDto trainingRegistrationDto = new TrainingRegistrationDto();
@@ -147,7 +149,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void CreateTrainingRegistration_ShouldReturnFalseWhenCreatingTrainingRegistration()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
             Guid trainingId = await repository.CreateTraining(training);
             TrainingRegistrationDto trainingRegistrationDto = new TrainingRegistrationDto();
             trainingRegistrationDto.TrainingId = trainingId;
@@ -192,21 +194,19 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void GetReports_ShouldReturnListOfReports()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
-
             await repository.CreateTraining(training);
 
             // Act
             List<TrainingReport> reports = await repository.GetReports();
 
             // Assert
-            Assert.Single(reports);
+            Assert.NotEmpty(reports);
         }
 
         [Fact]
         public async void GetTopics_ShouldReturnTopicsList()
         {
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
 
             Guid trainingId = await repository.CreateTraining(training);
 
@@ -219,7 +219,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void GetFilteredTopicUsers_ShouldReturnFilteredTopicUserList()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
             UsersRepository userRepository = new(new TestCoursesDbContextFactory());
 
             Guid trainingId = await repository.CreateTraining(training);
@@ -244,7 +244,7 @@ namespace DEVCoursesAPI.Tests.RepositoriesTests
         public async void GetFilteredTopicUsers_ShouldNotReturnFilteredTopicUserList()
         {
             // Arrange
-            TrainingRepository repository = new(new TestCoursesDbContextFactory());
+            
             UsersRepository userRepository = new(new TestCoursesDbContextFactory());
 
             Guid trainingId = await repository.CreateTraining(training);

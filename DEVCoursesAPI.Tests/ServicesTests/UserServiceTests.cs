@@ -173,7 +173,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4445")]
+    [InlineData("Rodrigo Raiche", "rodrigoraiche1@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4445")]
     public void G_Adicionar_Users_Com_Senha_Nao_Confere_Exception(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange
@@ -197,7 +197,7 @@ public class UserServiceTests
    
 
     [Theory]
-    [InlineData("rodrigoraiche@gmail.com", "RRR1525B")]
+    [InlineData("rodrigoraiche2@gmail.com", "RRR1525B")]
     public void H_Autenticacao_Com_Sucesso(string email, string password)
     {
         //Arrange
@@ -216,7 +216,7 @@ public class UserServiceTests
         
         var user = new DataUser
         {
-            Name = "Bia", Email = "rodrigoraiche@gmail.com", Age = 19, CPF = 02569644155, Password = "RRR1525B", PasswordRepeat = "RRR1525B"
+            Name = "Bia", Email = "rodrigoraiche2@gmail.com", Age = 19, CPF = 02569623155, Password = "RRR1525B", PasswordRepeat = "RRR1525B"
         };
         usersService.Add(user);
         var login = new LoginUser {
@@ -233,7 +233,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("rodrigoraiche@gmail.com", "RRR1525B")]
+    [InlineData("rodrigoraiche3@gmail.com", "RRR1525B")]
     public void I_Autenticacao_Com_Senha_Invalida_Exception(string email, string password)
     {
         //Arrange
@@ -252,7 +252,7 @@ public class UserServiceTests
         
         var user = new DataUser
         {
-            Name = "Bia", Email = "rodrigoraiche@gmail.com", Age = 19, CPF = 02569644155, Password = "RRR1525B", PasswordRepeat = "RRR1525B"
+            Name = "Bia", Email = "rodrigoraiche3@gmail.com", Age = 19, CPF = 02569644155, Password = "RRR1525B", PasswordRepeat = "RRR1525B"
         };
         usersService.Add(user);
         var login = new LoginUser {
@@ -270,7 +270,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("rodrigoraiche@gmail.com", "AAAA4444")]
+    [InlineData("rodrigoraiche4@gmail.com", "AAAA4444")]
     public void J_Autenticacao_Nao_Encontrado_User_Exception(string email, string password)
     {
         //Arrange
@@ -293,7 +293,7 @@ public class UserServiceTests
 
 
     [Theory]
-    [InlineData("rodrigoraiche@gmail.com", "AAAA4444")]
+    [InlineData("rodrigoraiche4@gmail.com", "AAAA4444")]
     public void K_Reset_Password_Com_Sucesso(string email, string password)
     {
         //Arrange
@@ -304,7 +304,7 @@ public class UserServiceTests
         passwordHasher.Setup(s => s.CreateHash(It.IsAny<string>())).Returns("$argon2id$v=19$m=65536,t=3,p=1$/8g9noaqQnsO4cy1aDPpcw$RBho86S4TAqcHnvvY0ljbP6mkTDlSG/Ub9Bcqbnrt1U");
         var user = new DataUser
         {
-            Name = "Bia", Email = "rodrigoraiche@gmail.com", Age = 19, CPF = 02569644155, Password = "AAAA5555", PasswordRepeat = "AAAA5555"
+            Name = "Bia", Email = "rodrigoraiche4@gmail.com", Age = 19, CPF = 01269644155, Password = "AAAA5555", PasswordRepeat = "AAAA5555"
         };
         usersService.Add(user);
         var login = new LoginUser {
@@ -320,7 +320,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("rodrigoraiche@gmail.com", "AAAA4444")]
+    [InlineData("rodrigoraiche5@gmail.com", "AAAA4444")]
     public void L_Reset_Password_Nao_Encontrado_User_Exception(string email, string password)
     {
         //Arrange
@@ -499,7 +499,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4445")]
+    [InlineData("Rodrigo Raiche", "rodrigoraiche6@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4445")]
     public void S_Atualiza_Users_Com_Senha_Nao_Confere_Exception(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange
@@ -547,7 +547,7 @@ public class UserServiceTests
     }
     
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche3@gmail.com", 18, 2569024670, "AAAA4444", "AAAA4444")]
+    [InlineData("Rodrigo Raiche", "rodrigoraich3@gmail.com", 18, 2569024670, "AAAA4444", "AAAA4444")]
     public void U_Atualiza_Users_Email_Alterado_Exception(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange
@@ -577,7 +577,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4444")]
+    [InlineData("Rodrigo Raiche", "rodrigo@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4444")]
     public void V_Atualiza_Users_CPF_Alterado_Exception(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange
@@ -607,7 +607,7 @@ public class UserServiceTests
     }
 
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4444")]
+    [InlineData("Rodrigo Raiche", "rodrigoraiche7@gmail.com", 18, 2569012399, "AAAA4444", "AAAA4444")]
     public void W_Atualiza_Users_Sucesso(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange
@@ -636,7 +636,7 @@ public class UserServiceTests
 
     
     [Theory]
-    [InlineData("Rodrigo Raiche", "rodrigoraiche3@gmail.com", 18, 2569024699, "AAAA4444", "AAAA4444")]
+    [InlineData("Rodrigo Raiche", "rodrigoraiche8@gmail.com", 18, 2123024699, "AAAA4444", "AAAA4444")]
     public void X_Obter_Users_Encontrado_Sucesso(string name, string email, int age, long CPF, string password, string passwordRepeat)
     {
         //Arrange

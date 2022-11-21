@@ -21,7 +21,7 @@ namespace DEVCoursesAPI.Tests.ServicesTests
             TopicsService service = new(mock.Object);
 
             Guid moduleId = Guid.NewGuid();
-            CreateTopicDto topicDto = new();
+            CreateTopicDto topicDto = new() { Content = "" };
 
             Task result = service.CreateTopicsAsync(topicDto, moduleId);
 
